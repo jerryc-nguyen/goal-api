@@ -1,0 +1,65 @@
+User:
+  - display_name
+  - email
+  - avatar_url
+  - facebook_token
+  - first_name
+  - last_name
+  - birthday
+  - phone_number
+  - latitude
+  - longitude
+
+Friendship:
+  - friendable_id (requester)
+  - friend_id (accepter)
+
+Goal:
+  - name [swim, eat, ...]
+  - start_at
+  - repeat_every: [week days]
+  - duration
+  - sound_name []
+  - is_challenge
+  - is_default
+  - status [enabled, disabled]
+  - creator_id
+
+GoalSession:
+  - creator_id
+  - participant_id
+  - goal_id
+  - score
+  - likes_count
+  - comments_count
+  - views_count
+  - status [setting_up, doing, remind_later, skip, done]
+
+Comment:
+  - creator_id
+  - content
+  - commentable_id
+  - commentable_type
+
+Like:
+  - likeable_id
+  - likeable_type
+  - creator_id
+
+Activity:
+  - activity_type: [GoalSession]
+  - activity_id
+  - creator_id
+
+Notification:
+  - message
+  - user_id
+  - notficable_id
+  - notificable_type
+  
+Chat:
+  - message
+  - sender_id
+  - receiver_id
+  
+
