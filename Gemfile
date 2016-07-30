@@ -17,6 +17,8 @@ gem 'amistad',    '~> 0.10.2'
 
 gem 'paranoia', "~> 2.1.4"
 
+gem 'config'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

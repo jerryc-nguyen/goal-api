@@ -56,6 +56,10 @@ GEM
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     concurrent-ruby (1.0.2)
+    config (1.2.1)
+      activesupport (>= 3.0)
+      deep_merge (~> 1.0, >= 1.0.1)
+    deep_merge (1.0.1)
     erubis (2.7.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -148,6 +152,7 @@ DEPENDENCIES
   active_model_serializers!
   amistad (~> 0.10.2)
   byebug
+  config
   kaminari
   paperclip (~> 4.2)
   paranoia (~> 2.1.4)
