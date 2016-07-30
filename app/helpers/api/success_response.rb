@@ -9,16 +9,12 @@ class Api::SuccessResponse
     end
 
     @response = { status: 200 }
-
-    if @response_key.present?
-      @response[response_key] = result 
-    else
-      @response["data"] = result
-    end
+    response_key ||= "data"
+    @response[response_key] = result 
   end
 
   def serialize_collection(collection, serializer, serialize_options)
-    return [] if collection.empty?
+    return [] if collection.to_a.empty?
 
     if collection.first.try(:errors) # this is Active record model
       serializer ||= collection.first.class::DEFAULT_SERIALIZER

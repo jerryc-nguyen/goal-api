@@ -1,7 +1,7 @@
 class ApiController < ActionController::Base
   
   def index
-    success(data: {"message": "Okie!"})
+    success(data: {"message": "It works!"})
   end
 
   def success(data: nil, serializer: nil, serialize_options: {}, response_key: nil)
