@@ -18,4 +18,14 @@ class ApiController < ActionController::Base
     render json: { status: status, error_message: message }
   end
 
+  def current_user
+    @current_user ||= User.first
+  end
+
+  def authentication!
+    unless current_user
+      error(message: "You should login to continue.")
+    end
+  end
+
 end

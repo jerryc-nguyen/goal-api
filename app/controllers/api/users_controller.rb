@@ -1,8 +1,12 @@
 class Api::UsersController < ApiController
-  before_action :find_user, only: [ :update, :destroy ]
+  before_action :find_user, only: [ :show, :update, :destroy ]
 
   def index
     success(data: User.all)
+  end
+
+  def show
+    success(data: @user)
   end
 
   def create
@@ -37,7 +41,7 @@ class Api::UsersController < ApiController
   end
 
   def user_params
-    params.require(:user).permit(*Settings.params_permitted.user)
+    @user_params ||= params.require(:user).permit(*Settings.params_permitted.user)
   end
 
 end
