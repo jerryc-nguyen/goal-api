@@ -58,8 +58,10 @@ ActiveRecord::Schema.define(version: 20160730142841) do
   create_table "friendships", force: :cascade do |t|
     t.integer  "friendable_id"
     t.integer  "friend_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "blocker_id"
+    t.boolean  "pending",       default: true
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.datetime "deleted_at"
   end
 
@@ -129,13 +131,15 @@ ActiveRecord::Schema.define(version: 20160730142841) do
     t.string   "display_name",   default: ""
     t.string   "email",          default: ""
     t.string   "avatar_url",     default: ""
-    t.string   "facebook_token", default: ""
     t.string   "first_name",     default: ""
     t.string   "last_name",      default: ""
     t.datetime "birthday"
     t.string   "phone_number"
     t.string   "latitude",       default: ""
     t.string   "longitude",      default: ""
+    t.integer  "auth_system"
+    t.string   "auth_system_id"
+    t.string   "token"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.datetime "deleted_at"

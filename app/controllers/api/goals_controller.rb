@@ -1,6 +1,5 @@
 class Api::GoalsController < ApiController
   before_action :authentication!
-
   before_action :find_goal, only: [ :show, :update, :destroy ]
 
   def index
