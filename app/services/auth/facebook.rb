@@ -6,18 +6,20 @@ class Auth::Facebook
     @access_token = access_token
   end
 
-  def login
+  def login?
     fb_user = fetch_fb_user
+    byebug
+
     if fb_user.blank?
       @errors = "Facebook token is invalid."
       return false
     elsif fb_user[:email].blank?
-      @errors = 'Please confirm your facebook email.'
+      @errors = "Please confirm your facebook email."
       return false
     end
 
     @logged_user = User.facebook.find_by(auth_system_id: fb_user[:id]) || create_user_for(fb_user) 
-    @logged_user.token = @access_token
+    @logged_user.auth_token = @access_token
     @logged_user.save
     true
   end
@@ -26,11 +28,11 @@ class Auth::Facebook
 
   def create_user_for(fb_user)
     User.facebook.create(
-      display_name: fb_user[:name], 
+      auth_name: fb_user[:name], 
       email: fb_user[:email], 
-      avatar_url: fb_user[:picture],
+      auth_picture: fb_user[:picture].to_json,
       auth_system_id: fb_user[:id],
-      token: @access_token
+      auth_token: @access_token
     )
   end
 

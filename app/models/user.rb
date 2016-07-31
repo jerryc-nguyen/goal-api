@@ -12,4 +12,21 @@ class User < ActiveRecord::Base
   has_many :likes, foreign_key: :creator_id
   has_many :notifications
   
+  def avatar_url
+    JSON.parse(auth_picture).fetch("data", {}).fetch("url", Settings.default_avatar) rescue Settings.default_avatar
+  end
+
+  private
+
+  before_create do 
+    self.token = generate_token
+  end
+
+  def generate_token
+    loop do
+      token = SecureRandom.hex(16)
+      break token unless User.exists?(token: token)
+    end
+  end
+
 end

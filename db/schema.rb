@@ -128,7 +128,6 @@ ActiveRecord::Schema.define(version: 20160730142841) do
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "display_name",   default: ""
     t.string   "email",          default: ""
     t.string   "avatar_url",     default: ""
     t.string   "first_name",     default: ""
@@ -137,9 +136,12 @@ ActiveRecord::Schema.define(version: 20160730142841) do
     t.string   "phone_number"
     t.string   "latitude",       default: ""
     t.string   "longitude",      default: ""
+    t.string   "token"
     t.integer  "auth_system"
     t.string   "auth_system_id"
-    t.string   "token"
+    t.string   "auth_token"
+    t.string   "auth_name"
+    t.string   "auth_picture"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.datetime "deleted_at"
