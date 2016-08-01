@@ -12,6 +12,10 @@ class User < ActiveRecord::Base
   has_many :likes, foreign_key: :creator_id
   has_many :notifications
   
+  def friendship_with(friend)
+    friendships.find_by(friend_id: friend.id)
+  end
+
   def avatar_url
     JSON.parse(auth_picture).fetch("data", {}).fetch("url", Settings.default_avatar) rescue Settings.default_avatar
   end

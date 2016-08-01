@@ -8,8 +8,7 @@ class Auth::Facebook
 
   def login?
     fb_user = fetch_fb_user
-    byebug
-
+    
     if fb_user.blank?
       @errors = "Facebook token is invalid."
       return false

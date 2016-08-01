@@ -1,5 +1,5 @@
 class Api::GoalsController < ApiController
-  before_action :authentication!
+  before_action :authenticate!
   before_action :find_goal, only: [ :show, :update, :destroy ]
 
   def index
@@ -15,7 +15,7 @@ class Api::GoalsController < ApiController
     if goal.valid?
       success(data: goal)
     else
-      error(message: goal.full_messages.to_sentence)
+      error(message: goal.errors.full_messages.to_sentence)
     end
   end
 
@@ -23,7 +23,7 @@ class Api::GoalsController < ApiController
     if @goal.update(goal_params)
       success(data: @goal)
     else
-      error(message: @goal.full_messages.to_sentence)
+      error(message: @goal.errors.full_messages.to_sentence)
     end
   end
 
@@ -31,7 +31,7 @@ class Api::GoalsController < ApiController
     if @goal.destroy
       success(data: { message: "Deleted successfuly!" })
     else
-      error(message: @goal.full_messages.to_sentence)
+      error(message: @goal.errors.full_messages.to_sentence)
     end
   end
 

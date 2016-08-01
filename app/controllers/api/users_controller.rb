@@ -14,7 +14,7 @@ class Api::UsersController < ApiController
     if user.valid?
       success(data: user)
     else
-      error(message: user.full_messages.to_sentence)
+      error(message: user.errors.full_messages.to_sentence)
     end
   end
 
@@ -22,7 +22,7 @@ class Api::UsersController < ApiController
     if @user.update(user_params)
       success(data: @user)
     else
-      error(message: @user.full_messages.to_sentence)
+      error(message: @user.errors.full_messages.to_sentence)
     end
   end
 
@@ -30,7 +30,7 @@ class Api::UsersController < ApiController
     if @user.destroy
       success(data: { message: "Deleted successfuly!" })
     else
-      error(message: @user.full_messages.to_sentence)
+      error(message: @user.errors.full_messages.to_sentence)
     end
   end
 

@@ -19,12 +19,12 @@ class ApiController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.first
+    @current_user ||= User.find_by(token: request.headers['X-Api-Token'])
   end
 
-  def authentication!
+  def authenticate!
     unless current_user
-      error(message: "You should login to continue.")
+      error(status: 401, message: "You should login to continue.")
     end
   end
 
