@@ -1,6 +1,8 @@
 class Api::GoalsController < ApiController
   before_action :authenticate!
-  before_action :find_goal, only: [ :show, :update, :destroy ]
+  before_action :find_goal, only: [ :show, :update, :destroy, :invite]
+  before_action :validate_friend_id!, only: [ :invite ]
+  before_action :validate_goal_owner, only: [:update, :destroy]
 
   def index
     success(data: current_user.goals)
@@ -11,11 +13,13 @@ class Api::GoalsController < ApiController
   end
 
   def create
-    goal = current_user.goals.create(goal_params)
-    if goal.valid?
-      success(data: goal)
-    else
-      error(message: goal.errors.full_messages.to_sentence)
+    Goal.transaction do
+      goal = current_user.goals.create!(goal_params)
+      if goal.valid? && goal.add_participant_for(current_user).valid?
+        success(data: goal)
+      else
+        error(message: goal.errors.full_messages.to_sentence)
+      end
     end
   end
 
@@ -35,10 +39,28 @@ class Api::GoalsController < ApiController
     end
   end
 
+  def invite
+    goal_session = @goal.invite_participant_for(@friend)
+    if goal_session.valid?
+      success(data: { message: "Invitation sent to #{@friend.display_name}" })
+    else
+      error(message: goal_session.errors.full_messages.to_sentence)
+    end
+  end
+
+  def pending_accept
+    goal_sessions = GoalSession.pending_accepted_for(User.last)
+    success(data: goal_sessions)
+  end
+
   private
 
+  def validate_goal_owner
+    error(message: "You can not edit goal of others.") if current_user.id != @goal.creator_id
+  end
+
   def find_goal
-    @goal ||= current_user.goals.find(params[:id])
+    @goal ||= Goal.find(params[:id])
   end
 
   def goal_params

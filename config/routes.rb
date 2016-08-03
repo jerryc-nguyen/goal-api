@@ -7,8 +7,22 @@ Rails.application.routes.draw do
     end
 
     resources :users, except: [:edit]
-    resources :goals, except: [:edit]
-    resources :friends, only: [:index]
+
+    resources :goals, except: [:edit] do
+      member do
+        post :invite
+      end
+
+      collection do
+        get :pending_accept
+      end
+    end
+
+    resources :friends, only: [:index] do
+      collection do
+        get :suggested
+      end
+    end
 
     resources :friendships, only: [:destroy] do
       collection do

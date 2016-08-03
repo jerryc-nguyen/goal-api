@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   acts_as_paranoid
+  
+  include Serializeable
   include Amistad::FriendModel
 
   DEFAULT_SERIALIZER = Api::UserSerializer
@@ -16,10 +18,18 @@ class User < ActiveRecord::Base
     friendships.find_by(friend_id: friend.id)
   end
 
+  def participate_to(goal)
+    goal.goal_sessions.create(participant_id: user.id)
+  end
+
   def avatar_url
     JSON.parse(auth_picture).fetch("data", {}).fetch("url", Settings.default_avatar) rescue Settings.default_avatar
   end
 
+  def display_name
+    auth_name || "#{first_name} #{last_name}"
+  end
+  
   private
 
   before_create do 

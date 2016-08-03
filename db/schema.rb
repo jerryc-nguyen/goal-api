@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160730142841) do
+ActiveRecord::Schema.define(version: 20160803190301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,9 +76,10 @@ ActiveRecord::Schema.define(version: 20160730142841) do
     t.integer  "comments_count"
     t.integer  "views_count"
     t.integer  "status",         default: 0
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.datetime "deleted_at"
+    t.boolean  "is_accepted",    default: false
   end
 
   add_index "goal_sessions", ["creator_id"], name: "index_goal_sessions_on_creator_id", using: :btree

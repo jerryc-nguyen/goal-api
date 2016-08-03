@@ -28,4 +28,11 @@ class ApiController < ActionController::Base
     end
   end
 
+  private
+
+  def validate_friend_id!
+    @friend ||= User.find_by_id(params[:friend_id])
+    error(message: "Friend for your request does not exists.") unless @friend.present?
+  end
+
 end

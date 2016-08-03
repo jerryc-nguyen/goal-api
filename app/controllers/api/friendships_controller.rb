@@ -1,6 +1,6 @@
 class Api::FriendshipsController < ApiController
   before_action :authenticate!
-  before_action :check_friend_id, only: [:request_friend, :accept_friend, :reject_friend]
+  before_action :validate_friend_id!, only: [:request_friend, :accept_friend, :reject_friend]
 
   def incomming
     success(data: current_user.pending_invited_by)
@@ -41,13 +41,6 @@ class Api::FriendshipsController < ApiController
     else
       error(message: @friendship.errors.full_messages.to_sentence)
     end
-  end
-
-  private
-
-  def check_friend_id
-    @friend ||= User.find_by_id(params[:friend_id])
-    error(message: "Friend for your request does not exists.") unless @friend.present?
   end
 
 end
