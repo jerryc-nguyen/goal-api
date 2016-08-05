@@ -13,7 +13,9 @@ class User < ActiveRecord::Base
   has_many :comments, foreign_key: :creator_id
   has_many :likes, foreign_key: :creator_id
   has_many :notifications
-  
+
+  has_many :categories
+
   def friendship_with(friend)
     friendships.find_by(friend_id: friend.id)
   end
@@ -36,10 +38,29 @@ class User < ActiveRecord::Base
     self.token = generate_token
   end
 
+  after_create do
+    initialize_users_data
+  end
+
   def generate_token
     loop do
       token = SecureRandom.hex(16)
       break token unless User.exists?(token: token)
+    end
+  end
+
+  def initialize_users_data
+    create_default_categories
+  end
+
+  def create_default_categories
+    Category.transaction do
+      Settings.default_goalcategories.each_with_index do |cat_name, index|
+        category = categories.find_or_initialize_by(name: cat_name)
+        category.is_default = true
+        category.nth = index
+        category.save
+      end
     end
   end
 

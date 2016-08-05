@@ -1,5 +1,25 @@
 class ApiController < ActionController::Base
-  
+
+  unless Rails.application.config.consider_all_requests_local
+    rescue_from StandardError do |exception|
+      error(message: exception)
+    end
+
+    rescue_from ActiveRecord::RecordInvalid do |exception|
+      error(message: exception.to_s)
+    end
+
+    rescue_from ActionController::ParameterMissing do |exception|
+      error(message: exception.to_s.capitalize)
+    end
+
+    rescue_from ActionController::RoutingError, with: :routing_error
+
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      error(status: 404, message: exception.to_s)
+    end
+  end
+
   def index
     success(data: {"message": "It works!"})
   end
@@ -29,6 +49,10 @@ class ApiController < ActionController::Base
   end
 
   private
+
+  def routing_error
+    error(status: 404, "No route matches.")
+  end
 
   def validate_friend_id!
     @friend ||= User.find_by_id(params[:friend_id])

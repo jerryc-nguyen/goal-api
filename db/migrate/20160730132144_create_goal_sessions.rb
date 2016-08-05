@@ -4,11 +4,12 @@ class CreateGoalSessions < ActiveRecord::Migration
       t.belongs_to  :creator
       t.belongs_to  :participant
       t.belongs_to  :goal
-      t.integer     :score
-      t.integer     :likes_count
-      t.integer     :comments_count
-      t.integer     :views_count
+      t.integer     :score, default: 0
+      t.integer     :likes_count, default: 0
+      t.integer     :comments_count, default: 0
+      t.integer     :views_count, default: 0
       t.integer     :status, default: 0
+      t.boolean      :is_accepted, default: false
       t.timestamps null: false
     end
 

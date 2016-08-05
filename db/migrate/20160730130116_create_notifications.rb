@@ -5,6 +5,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.string   :notificable_type
       t.integer  :notficable_id
       t.string   :message, default: ""
+      t.boolean  :is_read, default: false
       t.timestamps null: false
     end
 

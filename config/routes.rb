@@ -6,15 +6,18 @@ Rails.application.routes.draw do
       post "facebook", to: "auth#facebook"
     end
 
-    resources :users, except: [:edit]
+    resources :users, except: [:new, :edit]
 
-    resources :goals, except: [:edit] do
+    resources :goals, except: [:new, :edit] do
       member do
         post :invite
       end
 
       collection do
         get :pending_accept
+        get :home_timeline
+        get :user_timeline
+        get :default_goals
       end
     end
 
@@ -34,6 +37,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :categories, except: [:new, :edit]
+    
   end
 
   root to: "api#index", via: :all

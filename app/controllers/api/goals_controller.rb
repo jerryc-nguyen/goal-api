@@ -53,6 +53,20 @@ class Api::GoalsController < ApiController
     success(data: goal_sessions)
   end
 
+  def home_timeline
+    goal_sessions = GoalSession.page(params[:page] || 1)
+    success(data: goal_sessions, serializer: Api::GoalTimelineSerializer)
+  end
+
+  def user_timeline
+    goal_sessions = current_user.goal_sessions.page(params[:page] || 1)
+    success(data: goal_sessions, serializer: Api::GoalTimelineSerializer)
+  end
+
+  def default_goals
+    success(data: Settings.default_goals)
+  end
+
   private
 
   def validate_goal_owner

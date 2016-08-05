@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160803190301) do
+ActiveRecord::Schema.define(version: 20160805170311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,17 @@ ActiveRecord::Schema.define(version: 20160803190301) do
 
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name",       default: ""
+    t.boolean  "is_default", default: false
+    t.integer  "nth"
+    t.integer  "user_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "categories", ["user_id"], name: "index_categories_on_user_id", using: :btree
 
   create_table "chats", force: :cascade do |t|
     t.integer  "sender_id"
@@ -71,15 +82,15 @@ ActiveRecord::Schema.define(version: 20160803190301) do
     t.integer  "creator_id"
     t.integer  "participant_id"
     t.integer  "goal_id"
-    t.integer  "score"
-    t.integer  "likes_count"
-    t.integer  "comments_count"
-    t.integer  "views_count"
+    t.integer  "score",          default: 0
+    t.integer  "likes_count",    default: 0
+    t.integer  "comments_count", default: 0
+    t.integer  "views_count",    default: 0
     t.integer  "status",         default: 0
+    t.boolean  "is_accepted",    default: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.datetime "deleted_at"
-    t.boolean  "is_accepted",    default: false
   end
 
   add_index "goal_sessions", ["creator_id"], name: "index_goal_sessions_on_creator_id", using: :btree
@@ -90,17 +101,19 @@ ActiveRecord::Schema.define(version: 20160803190301) do
     t.string   "name",         default: ""
     t.datetime "start_at"
     t.integer  "repeat_every"
-    t.integer  "duration"
+    t.integer  "duration",     default: 0
     t.string   "sound_name"
     t.boolean  "is_challenge", default: false
     t.boolean  "is_default",   default: false
     t.integer  "status",       default: 0
     t.integer  "creator_id"
+    t.integer  "category_id"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.datetime "deleted_at"
   end
 
+  add_index "goals", ["category_id"], name: "index_goals_on_category_id", using: :btree
   add_index "goals", ["creator_id"], name: "index_goals_on_creator_id", using: :btree
 
   create_table "likes", force: :cascade do |t|
@@ -120,8 +133,9 @@ ActiveRecord::Schema.define(version: 20160803190301) do
     t.string   "notificable_type"
     t.integer  "notficable_id"
     t.string   "message",          default: ""
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.boolean  "is_read",          default: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.datetime "deleted_at"
   end
 
