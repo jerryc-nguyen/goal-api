@@ -1,6 +1,7 @@
 class ApiController < ActionController::Base
 
   unless Rails.application.config.consider_all_requests_local
+    
     rescue_from StandardError do |exception|
       error(message: exception)
     end
@@ -18,6 +19,7 @@ class ApiController < ActionController::Base
     rescue_from ActiveRecord::RecordNotFound do |exception|
       error(status: 404, message: exception.to_s)
     end
+
   end
 
   def index
@@ -51,7 +53,7 @@ class ApiController < ActionController::Base
   private
 
   def routing_error
-    error(status: 404, "No route matches.")
+    error(status: 404, message: "No route matches.")
   end
 
   def validate_friend_id!
