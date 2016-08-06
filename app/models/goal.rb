@@ -30,10 +30,15 @@ class Goal < ActiveRecord::Base
 
   before_create do
     generate_goal_name
+    set_default_start_time
   end
 
   def generate_goal_name
     self.name = [category.name, "at", formatted_start_at].join(" ")
+  end
+
+  def set_default_start_time
+    self.start_at ||= DateTime.now.in_time_zone(Time.zone).beginning_of_day + 6*3600
   end
 
 end
