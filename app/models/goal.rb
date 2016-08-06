@@ -15,11 +15,25 @@ class Goal < ActiveRecord::Base
   validates :category_id, presence: true
 
   def add_participant_for(user, is_accepted = true)
-    goal_sessions.create(participant_id: user.id, is_accepted: is_accepted)
+    goal_sessions.create!(participant_id: user.id, is_accepted: is_accepted, creator_id: creator_id)
   end
 
   def invite_participant_for(user)
     add_participant_for(user, false)
+  end
+
+  def formatted_start_at
+    start_at.present? ? start_at.strftime("%H:%M") : created_at.strftime("%H:%M")
+  end
+
+  private
+
+  before_create do
+    generate_goal_name
+  end
+
+  def generate_goal_name
+    self.name = [category.name, "at", formatted_start_at].join(" ")
   end
 
 end

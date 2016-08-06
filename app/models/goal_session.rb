@@ -10,7 +10,8 @@ class GoalSession < ActiveRecord::Base
 
   DEFAULT_SERIALIZER = Api::GoalSessionSerializer
 
-  validates_uniqueness_of :participant_id, scope: [:goal_id]
+  #validates_uniqueness_of :participant_id, scope: [:goal_id ] => validate user can not set session same time!
+
   validates :creator_id, presence: true
 
   belongs_to :creator, class_name: "User"
