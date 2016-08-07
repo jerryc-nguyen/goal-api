@@ -8,8 +8,8 @@ params_permitted:
 
 default_avatar: "default_avatar"
 
-default_goalcategories:
-  - Swimming everyday!
+default_goal_categories:
+  - Swim
   - Run
   - Read
   - Mediate

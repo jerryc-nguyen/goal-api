@@ -26,6 +26,10 @@ class Goal < ActiveRecord::Base
     start_at.present? ? start_at.strftime("%H:%M") : created_at.strftime("%H:%M")
   end
 
+  def detail_name
+    [category.name, "at", formatted_start_at].join(" ")
+  end
+
   private
 
   before_create do
@@ -34,7 +38,7 @@ class Goal < ActiveRecord::Base
   end
 
   def generate_goal_name
-    self.name = [category.name, "at", formatted_start_at].join(" ")
+    self.name = category.name
   end
 
   def set_default_start_time

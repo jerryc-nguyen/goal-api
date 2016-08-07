@@ -17,7 +17,9 @@ class GoalSession < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :participant, class_name: "User"
   belongs_to :goal
-    
+  
+  delegate :name, to: :goal, prefix: true, allow_nil: true
+
   scope :pending_accepted_for, -> (user) {
     where(is_accepted: false, participant_id: user.id)
   }
@@ -28,6 +30,14 @@ class GoalSession < ActiveRecord::Base
 
   def sessions_history
     GoalSession.sessions_history_for(self)
+  end
+
+  def finish_sentence
+    ["Just finish", "my", self.goal_name , "goal!"].join(" ")
+  end
+  
+  def feeling_sentence
+    ["feel", "amazing!"].join(" ")
   end
 
 end

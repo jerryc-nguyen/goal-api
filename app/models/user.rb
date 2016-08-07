@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
 
   def create_default_categories
     Category.transaction do
-      Settings.default_goalcategories.each_with_index do |cat_name, index|
+      Settings.default_goal_categories.each_with_index do |cat_name, index|
         category = categories.find_or_initialize_by(name: cat_name)
         category.is_default = true
         category.nth = index
