@@ -7,7 +7,9 @@ class Goal < ActiveRecord::Base
   belongs_to  :category
   has_many    :goal_sessions
   enum        status: { enabled: 0, disabled: 1 }
-
+  enum        repeat_every: { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thurday: 4, friday: 5, saturday: 6 }
+  enum        sound_name: { clock_alarm: 0 }
+  
   scope :for_session_ids, -> (sessions) {
     where(id: ids)
   }
@@ -42,7 +44,7 @@ class Goal < ActiveRecord::Base
   end
 
   def set_default_start_time
-    self.start_at ||= DateTime.now.in_time_zone(Time.zone).beginning_of_day + 6*3600
+    self.start_at ||= Time.current.in_time_zone(Time.zone).beginning_of_day + 6*3600
   end
 
 end

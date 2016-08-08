@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160805170311) do
+ActiveRecord::Schema.define(version: 20160808173843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,10 +99,9 @@ ActiveRecord::Schema.define(version: 20160805170311) do
 
   create_table "goals", force: :cascade do |t|
     t.string   "name",         default: ""
-    t.datetime "start_at"
+    t.time     "start_at"
     t.integer  "repeat_every"
     t.integer  "duration",     default: 0
-    t.string   "sound_name"
     t.boolean  "is_challenge", default: false
     t.boolean  "is_default",   default: false
     t.integer  "status",       default: 0
@@ -111,6 +110,7 @@ ActiveRecord::Schema.define(version: 20160805170311) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.datetime "deleted_at"
+    t.integer  "sound_name",   default: 0
   end
 
   add_index "goals", ["category_id"], name: "index_goals_on_category_id", using: :btree
