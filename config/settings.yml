@@ -1,6 +1,6 @@
 params_permitted:
   user: [ "display_name", "email", "avatar_url", "token", "first_name", "last_name", "birthday", "phone_number", "latitude", "longitude" ]
-  goal: [ "name", "start_at", "repeat_every", "duration", "sound_name", "is_challenge", "is_default", "category_id"]
+  goal: [ "name", "start_at", "repeat_every", "duration", "is_challenge", "is_default", "category_id"]
   
   friendship: ["friend_id", "blocker_id"]
   
