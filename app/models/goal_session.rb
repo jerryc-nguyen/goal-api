@@ -2,7 +2,7 @@ class GoalSession < ActiveRecord::Base
   paginates_per 5
 
   include Serializeable
-  include Notificable
+  # include Notificable
   include Likeable
   include Commentable
   # include PublicActivity::Model

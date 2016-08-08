@@ -21,7 +21,15 @@ class User < ActiveRecord::Base
   end
 
   def participate_to(goal)
-    goal.goal_sessions.create(participant_id: user.id)
+    goal.goal_sessions.create(participant_id: self.id)
+  end
+
+  def participate_to?(goal)
+    goal.goal_sessions.exists?(participant_id: self.id, is_accepted: true)
+  end
+
+  def participate_on?(goal, date)
+    goal.goal_sessions.exists?(created_at: date.beginning_of_day..date.end_of_day, goal_id: goal.id, participant_id: self.id) 
   end
 
   def avatar_url

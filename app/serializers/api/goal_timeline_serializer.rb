@@ -1,8 +1,8 @@
 class Api::GoalTimelineSerializer < Api::GoalSessionSerializer
-  attributes :sessions_history, :creator
+  attributes :sessions_history, :participant
 
-  def creator
-    object.creator.serialize
+  def participant
+    object.participant.serialize
   end
 
   def sessions_history
