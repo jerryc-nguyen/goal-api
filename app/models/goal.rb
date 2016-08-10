@@ -7,7 +7,6 @@ class Goal < ActiveRecord::Base
   belongs_to  :category
   has_many    :goal_sessions
   enum        status: { enabled: 0, disabled: 1 }
-  enum        repeat_every: { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thurday: 4, friday: 5, saturday: 6 }
   enum        sound_name: { clock_alarm: 0 }
   
   scope :for_session_ids, -> (sessions) {
@@ -15,6 +14,7 @@ class Goal < ActiveRecord::Base
   }
 
   validates :category_id, presence: true
+  validate :validate_repeat_every #validate repeat_every in ["monday", "tuesday", ...]
 
   def add_participant_for(user, is_accepted = true)
     goal_sessions.create!(participant_id: user.id, is_accepted: is_accepted, creator_id: creator_id)
@@ -63,6 +63,21 @@ class Goal < ActiveRecord::Base
   before_create do
     generate_goal_name
     set_default_start_time
+  end
+
+  def validate_repeat_every
+
+
+    values = repeat_every.is_a?(Array) ? repeat_every : []
+
+    if repeat_every.any?
+      invalid_values = values - Settings.goals.repeat_every
+      if invalid_values.any?
+        errors.add(:repeat_every, "has invalid values: #{invalid_values.join(', ')}")
+      end
+    else
+      errors.add(:repeat_every, "must be an array of values.")
+    end
   end
 
   def generate_goal_name

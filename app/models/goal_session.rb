@@ -18,7 +18,8 @@ class GoalSession < ActiveRecord::Base
   belongs_to :participant, class_name: "User"
   belongs_to :goal
   
-  delegate :name, to: :goal, prefix: true, allow_nil: true
+  delegate :name,         to: :goal, prefix: true, allow_nil: true
+  delegate :defail_name,  to: :goal, prefix: true, allow_nil: true
 
   scope :pending_accepted_for, -> (user) {
     where(is_accepted: false, participant_id: user.id)
