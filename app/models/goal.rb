@@ -17,7 +17,7 @@ class Goal < ActiveRecord::Base
   validate :validate_repeat_every #validate repeat_every in ["monday", "tuesday", ...]
 
   def add_participant_for(user, is_accepted = true)
-    goal_sessions.create!(participant_id: user.id, is_accepted: is_accepted, creator_id: creator_id)
+    goal_sessions.create(participant_id: user.id, is_accepted: is_accepted, creator_id: creator_id)
   end
 
   def completed_session_for(user, score, created_at = nil, feeling = nil)

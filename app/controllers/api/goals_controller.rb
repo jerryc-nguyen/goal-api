@@ -14,11 +14,16 @@ class Api::GoalsController < ApiController
 
   def create
     Goal.transaction do
-      goal = current_user.goals.create!(goal_params)
-      if goal.valid? && goal.add_participant_for(current_user).valid?
-        success(data: goal)
+      if (goal = current_user.goals.create(goal_params)).valid?
+        if (goal_session = goal.add_participant_for(current_user)).valid?
+          success(data: goal)
+        else
+          error(message: goal_session.errors.full_messages.to_sentence)
+          raise ActiveRecord::Rollback
+        end
       else
         error(message: goal.errors.full_messages.to_sentence)
+        raise ActiveRecord::Rollback
       end
     end
   end
