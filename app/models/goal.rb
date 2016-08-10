@@ -66,10 +66,7 @@ class Goal < ActiveRecord::Base
   end
 
   def validate_repeat_every
-
-
     values = repeat_every.is_a?(Array) ? repeat_every : []
-
     if repeat_every.any?
       invalid_values = values - Settings.goals.repeat_every
       if invalid_values.any?

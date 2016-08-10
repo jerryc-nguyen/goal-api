@@ -6,7 +6,7 @@ class Api::GoalTimelineSerializer < Api::GoalSessionSerializer
   end
 
   def sessions_history
-    object.sessions_history.map{|item| item.serialize(Api::SessionHistorySerializer) }
+    GoalServices::SessionsHistoryBuilder.new(object).build
   end
   
 end
