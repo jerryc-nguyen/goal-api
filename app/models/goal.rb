@@ -8,6 +8,12 @@ class Goal < ActiveRecord::Base
   has_many    :goal_sessions
   enum        status: { enabled: 0, disabled: 1 }
   enum        sound_name: { clock_alarm: 0 }
+
+  scope :joined_by, -> (user) {
+    joins(:goal_sessions)
+    .where(goal_sessions: { participant_id: user.id, is_accepted: true })
+    .order("goal_sessions.created_at desc")
+  }
   
   scope :for_session_ids, -> (sessions) {
     where(id: ids)

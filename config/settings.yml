@@ -6,7 +6,7 @@ params_permitted:
   
   category: ["name"]
 
-default_avatar: "default_avatar"
+default_avatar: "https://s9.postimg.org/ub0hzcfdr/default_avatar.jpg"
 
 default_goal_categories:
   - Swim

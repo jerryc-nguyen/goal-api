@@ -10,7 +10,7 @@ class GoalSession < ActiveRecord::Base
 
   DEFAULT_SERIALIZER = Api::GoalSessionSerializer
 
-  #validates_uniqueness_of :participant_id, scope: [:goal_id ] => validate user can not set session same time!
+  validates_uniqueness_of :participant_id, scope: [:goal_id ], message: 'You have joined this goal.' #user only can participate to goal 1 time.
 
   validates :creator_id, presence: true
 
@@ -18,10 +18,12 @@ class GoalSession < ActiveRecord::Base
   belongs_to :participant, class_name: "User"
   belongs_to :goal
   
+  enum status: { waiting_to_do: 0, doing: 1, completed: 2, remind_later: 3 }
+
   delegate :name,         to: :goal, prefix: true, allow_nil: true
   delegate :defail_name,  to: :goal, prefix: true, allow_nil: true
 
-  scope :pending_accepted_for, -> (user) {
+  scope :pending_accept_to_join_goal_for, -> (user) {
     where(is_accepted: false, participant_id: user.id)
   }
 

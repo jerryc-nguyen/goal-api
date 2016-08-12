@@ -2,10 +2,10 @@ class Api::GoalsController < ApiController
   before_action :authenticate!
   before_action :find_goal, only: [ :show, :update, :destroy, :invite]
   before_action :validate_friend_id!, only: [ :invite ]
-  before_action :validate_goal_owner, only: [:update, :destroy]
+  before_action :validate_goal_owner, only: [ :update, :destroy ]
 
   def index
-    success(data: current_user.goals)
+    success(data: Goal.joined_by(current_user))
   end
 
   def show
@@ -54,8 +54,21 @@ class Api::GoalsController < ApiController
   end
 
   def pending_accept
-    goal_sessions = GoalSession.pending_accepted_for(User.last)
+    goal_sessions = GoalSession.pending_accept_to_join_goal_for(current_user)
     success(data: goal_sessions)
+  end
+
+  def accept
+    current_pending_goal_sessions = GoalSession.pending_accept_to_join_goal_for(current_user)
+    goal_session = current_pending_goal_sessions.find_by_id(params[:goal_session_id])
+    return error(message: "You does not have any request to join this goal.") if goal_session.blank?
+
+    goal_session.is_accepted = true
+    if goal_session.save
+      success(data: "Accepted to join goal: #{goal_session.goal_detail_name}")
+    else
+      error(message: "Fail to join goal: #{goal_session.goal_detail_name}")
+    end
   end
 
   def home_timeline
@@ -71,7 +84,7 @@ class Api::GoalsController < ApiController
   private
 
   def validate_goal_owner
-    error(message: "You can not edit goal of others.") if current_user.id != @goal.creator_id
+    error(message: "Only goal creator can do this.") if current_user.id != @goal.creator_id
   end
 
   def find_goal

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         get :pending_accept
         get :home_timeline
         get :user_timeline
+        post :accept
       end
     end
 

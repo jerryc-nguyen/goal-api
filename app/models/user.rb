@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
   has_many :categories
 
+
   def friendship_with(friend)
     friendships.find_by(friend_id: friend.id)
   end
@@ -40,10 +41,20 @@ class User < ActiveRecord::Base
     auth_name || "#{first_name} #{last_name}"
   end
   
+  def approve_all_request!
+    pending_invited_by.each do |requester|
+      if approve(requester)
+        p "#{display_name} has approved friend request from #{requester.display_name}"
+      else
+        p "Approve error!"
+      end
+    end
+  end
+
   private
 
   before_create do 
-    self.token = generate_token
+    self.token ||= generate_token
   end
 
   after_create do
