@@ -3,7 +3,7 @@ class Goal < ActiveRecord::Base
   
   DEFAULT_SERIALIZER = Api::GoalSerializer
   
-  DAYS_PREVIOUS  = 6
+  DAYS_PREVIOUS  = 7
 
   belongs_to  :creator, class_name: "User"
   belongs_to  :category
@@ -26,6 +26,8 @@ class Goal < ActiveRecord::Base
 
   validates :category_id, presence: true
   validate :validate_repeat_every #validate repeat_every in ["monday", "tuesday", ...]
+
+  delegate :selected_color, to: :category, prefix: true, allow_nil: true
 
   def self.min_date_completed_session_for(user)
     GoalSession.joined_by(user).minimum(:created_at)
