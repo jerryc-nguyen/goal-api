@@ -31,6 +31,10 @@ class GoalSession < ActiveRecord::Base
     where(creator: goal_session.creator_id, goal: goal_session.goal_id)
   }
 
+  scope :sessions_history_of, -> (goal, viewing_user) {
+    where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true).order(created_at: :asc)
+  }
+
   def sessions_history
     GoalSession.sessions_history_for(self)
   end

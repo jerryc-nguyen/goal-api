@@ -6,7 +6,15 @@ Rails.application.routes.draw do
       post "facebook", to: "auth#facebook"
     end
 
-    resources :users, except: [:new, :edit]
+    resources :users, except: [:new, :edit]  do
+      collection do
+        get :home_timeline
+      end
+
+      member do
+        get :timeline
+      end
+    end
 
     resources :goals, except: [:new, :edit] do
       member do
@@ -15,8 +23,6 @@ Rails.application.routes.draw do
 
       collection do
         get :pending_accept
-        get :home_timeline
-        get :user_timeline
         post :accept
       end
     end

@@ -1,4 +1,4 @@
-class GoalServices::SessionsHistoryBuilder
+class GoalServices::SessionsHistoryForHomeTimelineBuilder
   
   TIMELINE_SESSIONS_LIMITTED = 5
 
@@ -9,7 +9,7 @@ class GoalServices::SessionsHistoryBuilder
   def build
     {
       date_labels: date_labels,
-      scores: scrores,
+      scores: scores,
       # current_id: @goal_session.id,
       # session_ids: session_ids
     }
@@ -39,7 +39,7 @@ class GoalServices::SessionsHistoryBuilder
     end
   end
 
-  def scrores
+  def scores
     sessions_history.map do |session|
       session.score * 1.0
     end

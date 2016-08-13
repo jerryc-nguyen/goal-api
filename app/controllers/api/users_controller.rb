@@ -34,6 +34,22 @@ class Api::UsersController < ApiController
     end
   end
 
+  def home_timeline
+    goal_sessions = GoalSession.page(params[:page] || 1)
+    success(data: goal_sessions, serializer: Api::GoalHomeTimelineSerializer)
+  end
+
+  def timeline
+    viewing_user = User.find(params[:id])
+    goals = Goal.joined_by(viewing_user)
+    response_data = {
+      goals: Goal.serialize_items(goals, current_user, Api::GoalUserTimelineSerializer),
+      viewing_user: viewing_user.serialize
+    }
+
+    success(data: response_data)
+  end
+
   private
 
   def find_user
