@@ -2,6 +2,8 @@ class Goal < ActiveRecord::Base
   include Serializeable
   
   DEFAULT_SERIALIZER = Api::GoalSerializer
+  
+  DAYS_PREVIOUS  = 6
 
   belongs_to  :creator, class_name: "User"
   belongs_to  :category
@@ -10,9 +12,12 @@ class Goal < ActiveRecord::Base
   enum        sound_name: { clock_alarm: 0 }
 
   scope :joined_by, -> (user) {
-    joins(:goal_sessions)
-    .where(goal_sessions: { participant_id: user.id, is_accepted: true })
-    .order("goal_sessions.created_at desc")
+    session_sql = GoalSession.joined_by(user)
+      .select("goal_sessions.goal_id, max(goal_sessions.created_at) as max_session_completed_at")
+      .group("goal_sessions.goal_id").to_sql
+
+    joins("JOIN (#{session_sql}) as recent_goals ON recent_goals.goal_id = goals.id")
+    .order("max_session_completed_at desc")
   }
   
   scope :for_session_ids, -> (sessions) {
@@ -21,6 +26,14 @@ class Goal < ActiveRecord::Base
 
   validates :category_id, presence: true
   validate :validate_repeat_every #validate repeat_every in ["monday", "tuesday", ...]
+
+  def self.min_date_completed_session_for(user)
+    GoalSession.joined_by(user).minimum(:created_at)
+  end
+
+  def self.max_date_completed_session_for(user)
+    GoalSession.joined_by(user).maximum(:created_at)
+  end
 
   def add_participant_for(user, is_accepted = true)
     goal_sessions.create(participant_id: user.id, is_accepted: is_accepted, creator_id: creator_id)
@@ -49,11 +62,50 @@ class Goal < ActiveRecord::Base
     [category.name, "at", formatted_start_at].join(" ")
   end
 
-  def add_fake_sessions_for(user)
+  def self.previous_dates_for(user)
+    total_days = Goal.max_date_completed_session_for(user) - Goal.min_date_completed_session_for(user)
+    total_days = (total_days / 84000).to_i - 1
+    if total_days > DAYS_PREVIOUS
+      @previous_dates ||= begin
+        (0..DAYS_PREVIOUS).to_a.reverse.map.each do |value|
+          (Time.current - value.day).beginning_of_day.to_i
+        end
+      end
+    else
+      @previous_dates ||= begin
+        (0..total_days).to_a.reverse.map.each do |value|
+          (Goal.max_date_completed_session_for(user) - value.day).beginning_of_day.to_i
+        end
+      end
+    end
+  end
+
+  def self.previous_date_labels_for(user)
+    total_days = Goal.max_date_completed_session_for(user) - Goal.min_date_completed_session_for(user)
+    total_days = (total_days / 84000).to_i - 1
+    if total_days > DAYS_PREVIOUS
+      @previous_date_labels ||= begin
+        (0..DAYS_PREVIOUS).to_a.reverse.map.each do |value|
+          (Time.current - value.day).strftime("%d %m")
+        end
+      end
+    else
+      @previous_date_labels ||= begin
+        (0..total_days).to_a.reverse.map.each do |value|
+          (Goal.max_date_completed_session_for(user) - value.day).strftime("%d-%m")
+        end
+      end
+    end
+  end
+
+  #swim: 23: [0, 2, 4, 6]
+  #run: 24 : [0, 1, 5]
+  #mediate: 25 [1, 3, 4, 7]
+  def add_fake_sessions_for(user, date_minus_arr = [])
     raise "#{user.display_name} does not participate to this goal!" unless user.participate_to?(self)
     scores = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     
-    [0,1,2,3,4,5,6, 7].each do |day_ago|
+    date_minus_arr.each do |day_ago|
       date = Time.current - day_ago.day
       
       unless user.participate_on?(self, date) #check if user not participate to this goal on date

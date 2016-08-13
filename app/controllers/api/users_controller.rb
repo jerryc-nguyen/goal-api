@@ -44,7 +44,8 @@ class Api::UsersController < ApiController
     goals = Goal.joined_by(viewing_user)
     response_data = {
       goals: Goal.serialize_items(goals, current_user, Api::GoalUserTimelineSerializer),
-      viewing_user: viewing_user.serialize
+      viewing_user: viewing_user.serialize,
+      date_labels: Goal.previous_date_labels_for(viewing_user)
     }
 
     success(data: response_data)

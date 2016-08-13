@@ -10,7 +10,7 @@ class GoalSession < ActiveRecord::Base
 
   DEFAULT_SERIALIZER = Api::GoalSessionSerializer
 
-  validates_uniqueness_of :participant_id, scope: [:goal_id ], message: 'You have joined this goal.' #user only can participate to goal 1 time.
+  #validates_uniqueness_of :participant_id, scope: [:goal_id ], message: 'You have joined this goal.' #user only can participate to goal 1 time.
 
   validates :creator_id, presence: true
 
@@ -27,16 +27,20 @@ class GoalSession < ActiveRecord::Base
     where(is_accepted: false, participant_id: user.id)
   }
 
-  scope :sessions_history_for, -> (goal_session) {
+  scope :same_goal_for, -> (goal_session) {
     where(creator: goal_session.creator_id, goal: goal_session.goal_id)
   }
 
   scope :sessions_history_of, -> (goal, viewing_user) {
-    where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true).order(created_at: :asc)
+    where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true, goal_id: goal.id).order(created_at: :asc)
+  }
+
+  scope :joined_by, -> (user) {
+    where(participant_id: user.id, is_accepted: true)
   }
 
   def sessions_history
-    GoalSession.sessions_history_for(self)
+    GoalSession.same_goal_for(self)
   end
 
   def finish_sentence

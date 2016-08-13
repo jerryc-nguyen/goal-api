@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
   has_many :comments, foreign_key: :creator_id
   has_many :likes, foreign_key: :creator_id
   has_many :notifications
-
   has_many :categories
 
 

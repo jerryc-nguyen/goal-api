@@ -18,7 +18,7 @@ class GoalServices::SessionsHistoryForHomeTimelineBuilder
   private
 
   def sessions_history
-    @sessions_history ||= GoalSession.sessions_history_for(@goal_session).limit(TIMELINE_SESSIONS_LIMITTED).to_a.reverse
+    @sessions_history ||= GoalSession.same_goal_for(@goal_session).limit(TIMELINE_SESSIONS_LIMITTED).to_a.reverse
   end
 
   def date_labels

@@ -1,5 +1,5 @@
 class GoalServices::SessionsHistoryForUserTimelineBuilder
-  
+
   def initialize(goal, viewing_user)
     @goal = goal
     @viewing_user = viewing_user
@@ -27,8 +27,16 @@ class GoalServices::SessionsHistoryForUserTimelineBuilder
   end
 
   def scores
-    sessions_history.map do |session|
-      session.score * 1.0
+    score_seed = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    date_score = {}
+    sessions_history.each do |session|
+      value = score_seed.shuffle.first
+      date = session.created_at.beginning_of_day.to_i
+      date_score[date] = session.score
+    end
+      
+    Goal.previous_dates_for(@viewing_user).map do |date|
+      date_score[date] || -1
     end
   end
 
