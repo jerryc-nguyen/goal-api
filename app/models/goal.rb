@@ -4,6 +4,7 @@ class Goal < ActiveRecord::Base
   DEFAULT_SERIALIZER = Api::GoalSerializer
   
   DAYS_PREVIOUS  = 7
+  DAYS_PREVIOUS_SINGLE_GOAL = 7
 
   belongs_to  :creator, class_name: "User"
   belongs_to  :category
@@ -95,6 +96,26 @@ class Goal < ActiveRecord::Base
       @previous_date_labels ||= begin
         (0..total_days).to_a.reverse.map.each do |value|
           (Goal.max_date_completed_session_for(user) - value.day).strftime("%d-%m")
+        end
+      end
+    end
+  end
+
+  def self.previous_dates_for_single_goal
+    @previous_dates_for_single_goal ||= begin
+      (0..DAYS_PREVIOUS_SINGLE_GOAL).to_a.reverse.map.each do |value|
+        (Time.current - value.day).beginning_of_day.to_i
+      end
+    end
+  end
+
+  def self.previous_dates_labels_for_single_goal
+    @previous_dates_labels_for_single_goal ||= begin
+      (0..DAYS_PREVIOUS_SINGLE_GOAL).to_a.reverse.map.each do |value|
+        if value == 0 
+          "Today"
+        else
+          (Time.current - value.day).strftime("%d-%m")
         end
       end
     end

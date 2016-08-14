@@ -21,20 +21,29 @@ class GoalServices::SessionsHistoryForUserTimelineBuilder
   end
 
   def date_labels
-    Goal.previous_dates_labels_for_single_goal
+    Goal.previous_dates_labels_for_single_goal.each_with_index.map do |value, index|
+      date_at_index = Goal.previous_dates_for_single_goal[index]
+      date_score_mapped[date_at_index].present? ? value : ""
+      value
+    end
   end
 
   def scores
-    score_seed = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    date_score = {}
-    sessions_history.each do |session|
-      value = score_seed.shuffle.first
-      date = session.created_at.beginning_of_day.to_i
-      date_score[date] = session.score
-    end
-      
     Goal.previous_dates_for_single_goal.map do |date|
-      date_score[date] || -1
+      date_score_mapped[date] || -1
+    end
+  end
+
+  def date_score_mapped
+    @date_score_mapped ||= begin 
+      score_seed = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+      date_score = {}
+      sessions_history.each do |session|
+        value = score_seed.shuffle.first
+        date = session.created_at.beginning_of_day.to_i
+        date_score[date] = session.score
+      end
+      date_score
     end
   end
 
