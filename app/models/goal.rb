@@ -30,6 +30,14 @@ class Goal < ActiveRecord::Base
 
   delegate :selected_color, to: :category, prefix: true, allow_nil: true
 
+  def start_at_hour
+    start_at.hour
+  end
+
+  def start_at_minute
+    start_at.min
+  end
+
   def start_at_interval
     (start_at.hour * 60 + start_at.min) * 60
   end
