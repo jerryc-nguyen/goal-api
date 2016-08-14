@@ -21,9 +21,7 @@ class GoalServices::SessionsHistoryForUserTimelineBuilder
   end
 
   def date_labels
-    sessions_history.map do |session|
-      date_info = session.created_at.strftime("%d %b")
-    end
+    Goal.previous_dates_labels_for_single_goal
   end
 
   def scores
@@ -35,7 +33,7 @@ class GoalServices::SessionsHistoryForUserTimelineBuilder
       date_score[date] = session.score
     end
       
-    Goal.previous_dates_for(@viewing_user).map do |date|
+    Goal.previous_dates_for_single_goal.map do |date|
       date_score[date] || -1
     end
   end
