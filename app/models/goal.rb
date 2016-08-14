@@ -4,7 +4,7 @@ class Goal < ActiveRecord::Base
   DEFAULT_SERIALIZER = Api::GoalSerializer
   
   DAYS_PREVIOUS  = 7
-  DAYS_PREVIOUS_SINGLE_GOAL = 7
+  DAYS_PREVIOUS_SINGLE_GOAL = 8
 
   belongs_to  :creator, class_name: "User"
   belongs_to  :category
@@ -29,6 +29,14 @@ class Goal < ActiveRecord::Base
   validate :validate_repeat_every #validate repeat_every in ["monday", "tuesday", ...]
 
   delegate :selected_color, to: :category, prefix: true, allow_nil: true
+
+  def start_at_interval
+    (start_at.hour * 60 + start_at.min) * 60
+  end
+
+  def end_at_interval
+    start_at_interval + duration.to_i * 60
+  end
 
   def self.min_date_completed_session_for(user)
     GoalSession.joined_by(user).minimum(:created_at)
@@ -115,7 +123,7 @@ class Goal < ActiveRecord::Base
         if value == 0 
           "Today"
         else
-          (Time.current - value.day).strftime("%d-%m")
+          (Time.current - value.day).strftime("%a")
         end
       end
     end
