@@ -38,6 +38,10 @@ class Goal < ActiveRecord::Base
     start_at.min
   end
 
+  def start_at_second
+    start_at.sec
+  end
+
   def start_at_interval
     (start_at.hour * 60 + start_at.min) * 60
   end

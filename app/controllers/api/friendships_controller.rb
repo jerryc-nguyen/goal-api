@@ -20,9 +20,9 @@ class Api::FriendshipsController < ApiController
 
   def accept_friend
     if current_user.approve(@friend)
-      success(data: { message: "Friend request accepted successfully."})
+      success(data: { message: "Accept friend request successfully."})
     else
-      error(message: "Friend request accepted fail.")
+      error(message: "Accept friend request fail.")
     end
   end
 
@@ -31,7 +31,7 @@ class Api::FriendshipsController < ApiController
     if friendship.present? && friendship.destroy
       success(data: { message: "Friend request reject successfully."})
     else
-      error(message: "Friend request reject fail.")
+      error(message: "Reject friend request fail.")
     end
   end
 
