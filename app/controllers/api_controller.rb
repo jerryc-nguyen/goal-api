@@ -27,6 +27,9 @@ class ApiController < ActionController::Base
   end
 
   def success(data: nil, serializer: nil, serialize_options: {}, response_key: nil)
+    serialize_options = serialize_options.merge(
+      current_user: current_user
+    )
     serializer = Api::SuccessResponse.new(
                   object: data, 
                   serializer: serializer, 

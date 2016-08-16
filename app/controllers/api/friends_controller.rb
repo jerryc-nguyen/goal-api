@@ -7,7 +7,8 @@ class Api::FriendsController < ApiController
 
   def suggested
     friend_ids = current_user.friends.ids
-    success(data: User.where.not(id: friend_ids))
+    users = User.where.not(id: friend_ids)
+    success(data: users)
   end
 
 end
