@@ -2,9 +2,11 @@ params_permitted:
   user: [ "display_name", "email", "avatar_url", "token", "first_name", "last_name", "birthday", "phone_number", "latitude", "longitude" ]
   goal: [ "name", "start_at", "repeat_every", "duration", "is_challenge", "is_default", "category_id"]
   
-  friendship: ["friend_id", "blocker_id"]
+  friendship: [ "friend_id", "blocker_id" ]
   
-  category: ["name"]
+  category: [ "name" ]
+  
+  goal_session: [ "score", "status", "remind_user_at"]
 
 default_avatar: "https://s9.postimg.org/ub0hzcfdr/default_avatar.jpg"
 

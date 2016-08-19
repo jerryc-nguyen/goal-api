@@ -28,6 +28,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :goal_sessions, except: [ :new, :edit, :create ]
+
     resources :friends, only: [:index] do
       collection do
         get :suggested

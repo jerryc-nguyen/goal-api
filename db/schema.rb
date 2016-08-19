@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160813174849) do
+ActiveRecord::Schema.define(version: 20160819001558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,15 +83,18 @@ ActiveRecord::Schema.define(version: 20160813174849) do
     t.integer  "creator_id"
     t.integer  "participant_id"
     t.integer  "goal_id"
-    t.integer  "score",          default: 0
-    t.integer  "likes_count",    default: 0
-    t.integer  "comments_count", default: 0
-    t.integer  "views_count",    default: 0
-    t.integer  "status",         default: 0
-    t.boolean  "is_accepted",    default: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "score",             default: 0
+    t.integer  "likes_count",       default: 0
+    t.integer  "comments_count",    default: 0
+    t.integer  "views_count",       default: 0
+    t.integer  "status",            default: 0
+    t.boolean  "is_accepted",       default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.datetime "deleted_at"
+    t.datetime "user_start_at"
+    t.datetime "user_completed_at"
+    t.datetime "remind_user_at"
   end
 
   add_index "goal_sessions", ["creator_id"], name: "index_goal_sessions_on_creator_id", using: :btree

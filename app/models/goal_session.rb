@@ -51,4 +51,18 @@ class GoalSession < ActiveRecord::Base
     ["feel", "amazing!"].join(" ")
   end
 
+  private
+
+  before_update do
+    if status_changed? && status == "doing"
+      self.user_start_at = Time.current
+    end
+
+    if status_changed? && status == "completed"
+      self.user_completed_at = Time.current
+    end
+    
+  end
+
+
 end
