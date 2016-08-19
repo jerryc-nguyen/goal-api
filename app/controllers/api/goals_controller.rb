@@ -72,6 +72,10 @@ class Api::GoalsController < ApiController
     end
   end
 
+  def buddies
+    success(data: User.goal_buddies_of(current_user))
+  end
+
   private
 
   def validate_goal_owner

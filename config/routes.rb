@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
       collection do
         get :pending_accept
+        get :buddies
         post :accept
       end
     end

@@ -14,7 +14,20 @@ class User < ActiveRecord::Base
   has_many :likes, foreign_key: :creator_id
   has_many :notifications
   has_many :categories
+  
+  scope :goal_buddies_of, -> (user) {
+    goal_ids_sql = user.goal_sessions
+      .select("goal_sessions.goal_id as selected_goal_ids").to_sql
 
+    participant_ids_same_goal_sql = GoalSession.where("goal_sessions.goal_id IN (#{goal_ids_sql}) AND is_accepted = true")
+      .select("goal_sessions.participant_id as participant_ids").to_sql
+
+    User.where("users.id IN (#{participant_ids_same_goal_sql})")
+  }
+
+  def pending_friend_with?(user)
+    Friendship.exists?(friendable_id: self.id, friend_id: user.id, pending: true)
+  end
 
   def friendship_with(friend)
     friendships.find_by(friend_id: friend.id)

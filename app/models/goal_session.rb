@@ -21,10 +21,14 @@ class GoalSession < ActiveRecord::Base
   enum status: { waiting_to_do: 0, doing: 1, completed: 2, remind_later: 3 }
 
   delegate :name,         to: :goal, prefix: true, allow_nil: true
-  delegate :defail_name,  to: :goal, prefix: true, allow_nil: true
+  delegate :detail_name,  to: :goal, prefix: true, allow_nil: true
 
   scope :pending_accept_to_join_goal_for, -> (user) {
-    where(is_accepted: false, participant_id: user.id)
+    user.goal_sessions.where(is_accepted: false)
+  }
+
+  scope :joined_by, -> (user) {
+    user.goal_sessions.where(is_accepted: true)
   }
 
   scope :same_goal_for, -> (goal_session) {
@@ -33,10 +37,6 @@ class GoalSession < ActiveRecord::Base
 
   scope :sessions_history_of, -> (goal, viewing_user) {
     where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true, goal_id: goal.id).order(created_at: :asc)
-  }
-
-  scope :joined_by, -> (user) {
-    where(participant_id: user.id, is_accepted: true)
   }
 
   def sessions_history
