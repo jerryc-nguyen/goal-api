@@ -24,3 +24,7 @@ goals:
     mediate: "#7299A8"
     draw: "#F76DD2"
   default_category_color: "#3BB351"
+
+push_notification:
+  app_id: <%= ENV['AIR_SHIPS_APP_KEY'] %>
+  app_secret: <%= ENV['AIR_SHIPS_APP_SECRET'] %>
