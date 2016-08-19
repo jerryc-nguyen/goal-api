@@ -31,23 +31,23 @@ class Goal < ActiveRecord::Base
   delegate :selected_color, to: :category, prefix: true, allow_nil: true
 
   def start_at_hour
-    start_at.hour
+    start_at.hour rescue 0
   end
 
   def start_at_minute
-    start_at.min
+    start_at.min rescue 0
   end
 
   def start_at_second
-    start_at.sec
+    start_at.sec rescue 0
   end
 
   def start_at_interval
-    (start_at.hour * 60 + start_at.min) * 60
+    (start_at.hour * 60 + start_at.min) * 60 rescue 0
   end
 
   def end_at_interval
-    start_at_interval + duration.to_i * 60
+    start_at_interval + duration.to_i * 60 rescue 0
   end
 
   def self.min_date_completed_session_for(user)
