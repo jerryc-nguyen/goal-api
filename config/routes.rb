@@ -16,23 +16,23 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :goals, except: [:new, :edit] do
+    resources :goals, except: [:new, :edit]
+
+    resources :goal_sessions, except: [ :new, :edit, :create ] do
       member do
         post :invite
+        post :accept
       end
 
       collection do
         get :pending_accept
-        get :buddies
-        post :accept
       end
     end
-
-    resources :goal_sessions, except: [ :new, :edit, :create ]
 
     resources :friends, only: [:index] do
       collection do
         get :suggested
+        get :buddies
       end
     end
 

@@ -1,7 +1,6 @@
 class Api::GoalsController < ApiController
   before_action :authenticate!
-  before_action :find_goal, only: [ :show, :update, :destroy, :invite]
-  before_action :validate_friend_id!, only: [ :invite ]
+  before_action :find_goal, only: [ :show, :update, :destroy]
   before_action :validate_goal_owner, only: [ :update, :destroy ]
 
   def index
@@ -43,37 +42,6 @@ class Api::GoalsController < ApiController
     else
       error(message: @goal.errors.full_messages.to_sentence)
     end
-  end
-
-  def invite
-    goal_session = @goal.invite_participant_for(@friend)
-    if goal_session.valid?
-      success(data: { message: "Invitation sent to #{@friend.display_name}" })
-    else
-      error(message: goal_session.errors.full_messages.to_sentence)
-    end
-  end
-
-  def pending_accept
-    goal_sessions = GoalSession.pending_accept_to_join_goal_for(current_user)
-    success(data: goal_sessions)
-  end
-
-  def accept
-    current_pending_goal_sessions = GoalSession.pending_accept_to_join_goal_for(current_user)
-    goal_session = current_pending_goal_sessions.find_by_id(params[:goal_session_id])
-    return error(message: "You does not have any request to join this goal.") if goal_session.blank?
-
-    goal_session.is_accepted = true
-    if goal_session.save
-      success(data: "Accepted to join goal: #{goal_session.goal_detail_name}")
-    else
-      error(message: "Fail to join goal: #{goal_session.goal_detail_name}")
-    end
-  end
-
-  def buddies
-    success(data: User.goal_buddies_of(current_user))
   end
 
   private

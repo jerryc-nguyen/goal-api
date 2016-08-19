@@ -11,4 +11,8 @@ class Api::FriendsController < ApiController
     success(data: users)
   end
 
+  def buddies
+    success(data: User.goal_buddies_of(current_user))
+  end
+  
 end

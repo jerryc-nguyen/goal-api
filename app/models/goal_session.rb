@@ -39,6 +39,10 @@ class GoalSession < ActiveRecord::Base
     where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true, goal_id: goal.id).order(created_at: :asc)
   }
 
+   def invite_participant_for(user)
+    goal.add_participant_for(user, false)
+  end
+
   def sessions_history
     GoalSession.same_goal_for(self)
   end
@@ -61,7 +65,7 @@ class GoalSession < ActiveRecord::Base
     if status_changed? && status == "completed"
       self.user_completed_at = Time.current
     end
-    
+
   end
 
 

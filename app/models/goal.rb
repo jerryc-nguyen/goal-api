@@ -72,11 +72,7 @@ class Goal < ActiveRecord::Base
     params[:created_at] = created_at if created_at.present?
     goal_sessions.create(params)
   end
-
-  def invite_participant_for(user)
-    add_participant_for(user, false)
-  end
-
+  
   def formatted_start_at
     start_at.present? ? start_at.strftime("%H:%M") : created_at.strftime("%H:%M")
   end
