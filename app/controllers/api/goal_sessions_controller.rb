@@ -1,8 +1,8 @@
 class Api::GoalSessionsController < ApiController
   before_action :authenticate!
-  before_action :find_goal_session, only: [ :show, :update, :destroy, :invite ]
+  before_action :find_goal_session, only: [ :show, :update, :destroy, :invite, :invite_by_email ]
   before_action :validate_friend_id!, only: [ :invite ]
-  
+
   def index
     success(data: current_user.goal_sessions)
   end
@@ -34,6 +34,11 @@ class Api::GoalSessionsController < ApiController
     else
       error(message: @goal_session.errors.full_messages.to_sentence)
     end
+  end
+
+  def invite_by_email
+    GoalBuddiesInvitationMailer.challenge_email(current_user, @goal_session, params[:email]).deliver_now
+    success(data: {message: "Email invitation sent!"})
   end
 
   def invite

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :goal_sessions, except: [ :new, :edit, :create ] do
       member do
         post :invite
+        post :invite_by_email
         post :accept
       end
 
