@@ -12,6 +12,8 @@ class Api::FriendshipsController < ApiController
 
   def request_friend
     if current_user.invite(@friend)
+      friendship_notifier.notify_request_to(@friend)
+
       success(data: { message: "Friend request sent successfully."})
     else
       error(message: "Friend request sent.")
@@ -20,6 +22,8 @@ class Api::FriendshipsController < ApiController
 
   def accept_friend
     if current_user.approve(@friend)
+      friendship_notifier.notify_accept_to(@friend)
+
       success(data: { message: "Accept friend request successfully."})
     else
       error(message: "Accept friend request fail.")
@@ -41,6 +45,12 @@ class Api::FriendshipsController < ApiController
     else
       error(message: @friendship.errors.full_messages.to_sentence)
     end
+  end
+
+  private
+
+  def friendship_notifier
+    @friendship_notifier ||= PushServices::FriendshipNotifier.new(current_user, @friend)
   end
 
 end

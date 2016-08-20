@@ -63,6 +63,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def airship_tag
+    "user-#{self.id}"
+  end
+
   private
 
   before_create do 
