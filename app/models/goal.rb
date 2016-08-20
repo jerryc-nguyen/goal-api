@@ -46,6 +46,26 @@ class Goal < ActiveRecord::Base
     (start_at.hour * 60 + start_at.min) * 60 rescue 0
   end
 
+  def session_end_at
+    start_at + 60*duration.to_i
+  end
+
+  def end_at_hour
+    session_end_at.hour rescue 0
+  end
+
+  def end_at_minute
+    session_end_at.min rescue 0
+  end
+
+  def end_at_second
+    session_end_at.sec rescue 0
+  end
+
+  def start_at_interval
+    (start_at.hour * 60 + start_at.min) * 60 rescue 0
+  end
+
   def end_at_interval
     start_at_interval + duration.to_i * 60 rescue 0
   end

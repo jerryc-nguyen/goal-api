@@ -50,7 +50,7 @@ class Api::FriendshipsController < ApiController
   private
 
   def friendship_notifier
-    @friendship_notifier ||= PushServices::FriendshipNotifier.new(current_user, @friend)
+    @friendship_notifier ||= PushServices::FriendshipNotifier.new(current_user)
   end
 
 end
