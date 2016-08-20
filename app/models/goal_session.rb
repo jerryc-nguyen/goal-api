@@ -38,8 +38,8 @@ class GoalSession < ActiveRecord::Base
   scope :sessions_history_of, -> (goal, viewing_user) {
     where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true, goal_id: goal.id).order(created_at: :asc)
   }
-
-   def invite_participant_for(user)
+  
+  def invite_participant_for(user)
     goal.add_participant_for(user, false)
   end
 

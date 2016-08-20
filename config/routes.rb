@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         post :invite
         post :invite_by_email
         post :accept
+        get :suggest_buddies
       end
 
       collection do
@@ -32,7 +33,6 @@ Rails.application.routes.draw do
 
     resources :friends, only: [:index] do
       collection do
-        get :suggested
         get :buddies
       end
     end

@@ -1,6 +1,6 @@
 class Api::GoalSessionsController < ApiController
   before_action :authenticate!
-  before_action :find_goal_session, only: [ :show, :update, :destroy, :invite, :invite_by_email ]
+  before_action :find_goal_session, only: [ :show, :update, :destroy, :invite, :invite_by_email, :suggest_buddies]
   before_action :validate_friend_id!, only: [ :invite ]
 
   def index
@@ -66,6 +66,12 @@ class Api::GoalSessionsController < ApiController
     else
       error(message: "Fail to join goal: #{goal_session.goal_detail_name}")
     end
+  end
+
+  def suggest_buddies
+    joined_participant_ids = @goal_session.goal.goal_sessions.pluck(:participant_id) rescue []
+    joined_participant_ids = joined_participant_ids + [current_user.id]
+    success(data: User.where.not(id: joined_participant_ids))
   end
 
   private
