@@ -19,9 +19,9 @@ gem 'paranoia', "~> 2.1.4"
 
 gem 'config'
 
-gem "koala", "~> 2.2"
+gem "koala"
 
-gem 'urbanairship'
+gem 'urbanairship', github: 'urbanairship/ruby-library'
 
 
 # Use ActiveModel has_secure_password

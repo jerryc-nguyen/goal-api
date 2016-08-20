@@ -29,4 +29,4 @@ goals:
 
 push_notification:
   app_id: <%= ENV['AIR_SHIPS_APP_KEY'] %>
-  app_secret: <%= ENV['AIR_SHIPS_APP_SECRET'] %>
+  app_master_secret: <%= ENV['AIR_SHIPS_APP_MASTER_SECRET'] %>
