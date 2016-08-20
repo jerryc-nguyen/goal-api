@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
     participant_ids_same_goal_sql = GoalSession.where("goal_sessions.goal_id IN (#{goal_ids_sql}) AND is_accepted = true")
       .select("goal_sessions.participant_id as participant_ids").to_sql
 
-    User.where("users.id IN (#{participant_ids_same_goal_sql})")
+    User.where("users.id IN (#{participant_ids_same_goal_sql}) AND users.id != #{user.id}")
   }
 
   def pending_friend_with?(user)
