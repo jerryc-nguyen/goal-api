@@ -18,7 +18,7 @@ class GoalSession < ActiveRecord::Base
   belongs_to :participant, class_name: "User"
   belongs_to :goal
   
-  enum status: { waiting_to_do: 0, doing: 1, completed: 2, remind_later: 3 }
+  enum status: { waiting_to_do: 0, doing: 1, completed: 2, remind_later: 3, cannot_make_today: 4 }
 
   delegate :name,         to: :goal, prefix: true, allow_nil: true
   delegate :detail_name,  to: :goal, prefix: true, allow_nil: true
@@ -58,11 +58,12 @@ class GoalSession < ActiveRecord::Base
   private
 
   before_update do
+
     if status_changed? && status == "doing"
       self.user_start_at = Time.current
     end
 
-    if status_changed? && status == "completed"
+    if status_changed? && [ "completed", "cannot_make_today" ].include?(status)
       self.user_completed_at = Time.current
     end
 

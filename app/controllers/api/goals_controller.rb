@@ -15,8 +15,7 @@ class Api::GoalsController < ApiController
     Goal.transaction do
       if (goal = current_user.goals.create(goal_params)).valid?
         if (goal_session = goal.add_participant_for(current_user)).valid?
-          p goal.serialize
-          success(data: goal)
+          success(data: goal_session)
         else
           error(message: goal_session.errors.full_messages.to_sentence)
           raise ActiveRecord::Rollback
