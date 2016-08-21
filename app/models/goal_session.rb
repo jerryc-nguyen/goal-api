@@ -65,9 +65,9 @@ class GoalSession < ActiveRecord::Base
       .where(goal_id: goal.id, participant_id: participant.id)
       .where("goals.repeat_every @> ?", "{#{goal_session_wday}}")
   }
-  
+
   scope :sessions_todo_today_for, -> (goal, participant) {
-    session_today_for(goal, participant).todo
+    session_today_for(goal, participant).waiting_to_do
   }
 
   scope :sessions_to_complete_today_for, -> (goal, participant) {
@@ -78,7 +78,11 @@ class GoalSession < ActiveRecord::Base
     goal.goal_sessions.where(participant_id: participant.id).created_today
   }
 
-  scope :sessions_to_complete_or_completed_today_for, ->(goal, participant) {
+  scope :sessions_todo_created_today_for, ->(goal, participant) {
+    sessions_created_today_for(goal, participant).waiting_to_do
+  }
+
+  scope :sessions_to_complete_or_completed_created_today_for, ->(goal, participant) {
     sessions_created_today_for(goal, participant).where(status: [DOING, COMPLETED])
   }
 

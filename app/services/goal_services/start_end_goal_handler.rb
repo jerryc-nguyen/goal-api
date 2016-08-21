@@ -53,11 +53,11 @@ class GoalServices::StartEndGoalHandler
   end
 
   def find_or_initialize_session_todo_today
-    GoalSession.sessions_todo_today_for(@goal, @current_user).first || session_created_today
+    GoalSession.sessions_todo_today_for(@goal, @current_user).first || session_todo_created_today
   end
 
   def session_todo_created_today
-    session = GoalSession.sessions_created_today_for(@goal, @current_user).waiting_to_do.first
+    session = GoalSession.sessions_todo_created_today_for(@goal, @current_user).first
     session || @goal.goal_sessions.new(creator_id: @goal.creator_id, participant_id: @current_user.id, is_accepted: true)
   end
 
@@ -66,7 +66,7 @@ class GoalServices::StartEndGoalHandler
   end
 
   def session_to_complete_created_today
-    session = GoalSession.sessions_to_complete_or_completed_today_for(@goal, @current_user).first
+    session = GoalSession.sessions_to_complete_or_completed_created_today_for(@goal, @current_user).first
     session || @goal.goal_sessions.new(creator_id: @goal.creator_id, participant_id: @current_user.id, is_accepted: true)
   end
 
