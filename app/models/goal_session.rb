@@ -78,8 +78,8 @@ class GoalSession < ActiveRecord::Base
     goal.goal_sessions.where(participant_id: participant.id).created_today
   }
 
-  scope :sessions_todo_created_today_for, ->(goal, participant) {
-    sessions_created_today_for(goal, participant).waiting_to_do
+  scope :sessions_todo_or_doing_created_today_for, ->(goal, participant) {
+    sessions_created_today_for(goal, participant).where(status: [WAITING_TO_DO, DOING])
   }
 
   scope :sessions_to_complete_or_completed_created_today_for, ->(goal, participant) {
@@ -101,20 +101,5 @@ class GoalSession < ActiveRecord::Base
   def feeling_sentence
     ["feel", "amazing!"].join(" ")
   end
-
-  private
-
-  before_update do
-
-    if status_changed? && status == "doing"
-      self.user_start_at = Time.current
-    end
-
-    if status_changed? && [ "completed", "cannot_make_today" ].include?(status)
-      self.user_completed_at = Time.current
-    end
-
-  end
-
 
 end

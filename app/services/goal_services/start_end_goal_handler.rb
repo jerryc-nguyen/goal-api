@@ -57,7 +57,7 @@ class GoalServices::StartEndGoalHandler
   end
 
   def session_todo_created_today
-    session = GoalSession.sessions_todo_created_today_for(@goal, @current_user).first
+    session = GoalSession.sessions_todo_or_doing_created_today_for(@goal, @current_user).first
     session || @goal.goal_sessions.new(creator_id: @goal.creator_id, participant_id: @current_user.id, is_accepted: true)
   end
 
