@@ -1,4 +1,4 @@
-class Api::GoalHomeTimelineSerializer < Api::GoalSessionSerializer
+class Api::HomeTimelineGoalSessionSerializer < Api::GoalSessionSerializer
   attributes :sessions_history, :participant
 
   def participant

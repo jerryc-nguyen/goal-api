@@ -28,6 +28,16 @@ class Api::GoalSessionsController < ApiController
     end
   end
 
+  def handle_start_end
+    goal = Goal.find(start_end_params[:goal_id])
+    service = GoalServices::StartEndGoalHandler.new(current_user, goal, start_end_params)
+    if service.handle_success?
+      success(data: service.goal_session)
+    else
+      error(message: service.error_message)
+    end
+  end
+
   def destroy
     if @goal_session.destroy
       success(data: { message: "Deleted successfuly!" })
@@ -75,6 +85,10 @@ class Api::GoalSessionsController < ApiController
   end
 
   private
+
+  def start_end_params
+    params.permit(:status, :goal_id, :remind_user_at)
+  end
 
   def find_goal_session
     @goal_session ||= GoalSession.find(params[:id])

@@ -42,7 +42,7 @@ class Api::GoalsController < ApiController
       error(message: @goal.errors.full_messages.to_sentence)
     end
   end
-
+  
   private
 
   def validate_goal_owner

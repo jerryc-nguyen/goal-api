@@ -10,6 +10,16 @@ class GoalSession < ActiveRecord::Base
 
   DEFAULT_SERIALIZER = Api::GoalSessionSerializer
 
+  WEEK_DAYS = {
+    0 => "sunday",
+    1 => "monday",
+    2 => "tuesday",
+    3 => "wednesday",
+    4 => "thursday",
+    5 => "friday",
+    6 => "saturday"
+  }
+
   #validates_uniqueness_of :participant_id, scope: [:goal_id ], message: 'You have joined this goal.' #user only can participate to goal 1 time.
 
   validates :creator_id, presence: true
@@ -18,7 +28,13 @@ class GoalSession < ActiveRecord::Base
   belongs_to :participant, class_name: "User"
   belongs_to :goal
   
-  enum status: { waiting_to_do: 0, doing: 1, completed: 2, remind_later: 3, cannot_make_today: 4 }
+  WAITING_TO_DO = 0
+  DOING = 1
+  COMPLETED = 2
+  REMIND_LATER = 3
+  CANNOT_MAKE_TODAY = 4
+
+  enum status: { waiting_to_do: WAITING_TO_DO, doing: DOING, completed: COMPLETED, remind_later: REMIND_LATER, cannot_make_today: CANNOT_MAKE_TODAY }
 
   delegate :name,         to: :goal, prefix: true, allow_nil: true
   delegate :detail_name,  to: :goal, prefix: true, allow_nil: true
@@ -38,7 +54,19 @@ class GoalSession < ActiveRecord::Base
   scope :sessions_history_of, -> (goal, viewing_user) {
     where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true, goal_id: goal.id).order(created_at: :asc)
   }
-  
+
+  scope :sessions_todo_today_for, -> (goal, participant) {
+    goal_session_wday = WEEK_DAYS[Time.current.wday]
+    joins(:goal)
+      .where(goal_id: goal.id, participant_id: participant.id, status: [ WAITING_TO_DO, REMIND_LATER])
+      .where("goals.repeat_every @> ?", "{#{goal_session_wday}}")
+    
+  }
+
+  scope :sessions_created_today_for, -> (goal, participant) {
+    goal.goal_sessions.where(participant_id: participant.id)
+      .where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_day, Time.current.end_of_day)
+  }
   def invite_participant_for(user)
     goal.add_participant_for(user, false)
   end

@@ -36,7 +36,7 @@ class Api::UsersController < ApiController
 
   def home_timeline
     goal_sessions = GoalSession.page(params[:page] || 1)
-    success(data: goal_sessions, serializer: Api::GoalHomeTimelineSerializer)
+    success(data: goal_sessions, serializer: Api::HomeTimelineSerializer)
   end
 
   def timeline

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819001558) do
+ActiveRecord::Schema.define(version: 20160821052958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 20160819001558) do
     t.datetime "deleted_at"
     t.datetime "user_start_at"
     t.datetime "user_completed_at"
-    t.datetime "remind_user_at"
+    t.time     "remind_user_at"
   end
 
   add_index "goal_sessions", ["creator_id"], name: "index_goal_sessions_on_creator_id", using: :btree

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
     resources :goals, except: [:new, :edit]
 
-    resources :goal_sessions, except: [ :new, :edit, :create ] do
+    resources :goal_sessions, except: [ :new, :edit ] do
       member do
         post :invite
         post :invite_by_email
@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
       collection do
         get :pending_accept
+        post :handle_start_end
       end
     end
 
