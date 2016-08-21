@@ -55,7 +55,7 @@ class Api::GoalsController < ApiController
 
   def goal_params
     @goal_params ||= params.require(:goal).permit(*Settings.params_permitted.goal).tap do |permitted_params| 
-      permitted_params[:repeat_every] = params[:goal][:repeat_every]
+      permitted_params[:repeat_every] = params[:goal][:repeat_every] if permitted_params[:repeat_every].present?
     end
   end
 
