@@ -87,7 +87,7 @@ class Api::GoalSessionsController < ApiController
   private
 
   def start_end_params
-    params.permit(:status, :goal_id, :remind_user_at)
+    params.permit(:status, :goal_id, :remind_user_at, :score)
   end
 
   def find_goal_session

@@ -55,18 +55,33 @@ class GoalSession < ActiveRecord::Base
     where(creator: goal.creator_id, participant_id: viewing_user.id, is_accepted: true, goal_id: goal.id).order(created_at: :asc)
   }
 
-  scope :sessions_todo_today_for, -> (goal, participant) {
+  scope :created_today, -> {
+    where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_day, Time.current.end_of_day)
+  }
+
+  scope :session_today_for, -> (goal, participant) {
     goal_session_wday = WEEK_DAYS[Time.current.wday]
     joins(:goal)
-      .where(goal_id: goal.id, participant_id: participant.id, status: [ WAITING_TO_DO, REMIND_LATER])
+      .where(goal_id: goal.id, participant_id: participant.id)
       .where("goals.repeat_every @> ?", "{#{goal_session_wday}}")
-    
+  }
+  
+  scope :sessions_todo_today_for, -> (goal, participant) {
+    session_today_for(goal, participant).todo
+  }
+
+  scope :sessions_to_complete_today_for, -> (goal, participant) {
+    session_today_for(goal, participant).doing
   }
 
   scope :sessions_created_today_for, -> (goal, participant) {
-    goal.goal_sessions.where(participant_id: participant.id)
-      .where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_day, Time.current.end_of_day)
+    goal.goal_sessions.where(participant_id: participant.id).created_today
   }
+
+  scope :sessions_to_complete_or_completed_today_for, ->(goal, participant) {
+    sessions_created_today_for(goal, participant).where(status: [DOING, COMPLETED])
+  }
+
   def invite_participant_for(user)
     goal.add_participant_for(user, false)
   end
