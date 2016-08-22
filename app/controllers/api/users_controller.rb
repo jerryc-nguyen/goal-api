@@ -35,7 +35,11 @@ class Api::UsersController < ApiController
   end
 
   def home_timeline
-    goal_sessions = GoalSession.page(params[:page] || 1)
+    goal_sessions = GoalSession.joins(:participant)
+      .accepted
+      .completed
+      .order(created_at: :desc).page(params[:page] || 1)
+      
     success(data: goal_sessions, serializer: Api::HomeTimelineSerializer)
   end
 

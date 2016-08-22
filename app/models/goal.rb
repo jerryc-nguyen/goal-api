@@ -8,7 +8,7 @@ class Goal < ActiveRecord::Base
 
   belongs_to  :creator, class_name: "User"
   belongs_to  :category
-  has_many    :goal_sessions
+  has_many    :goal_sessions, dependent: :destroy
   enum        status: { enabled: 0, disabled: 1 }
   enum        sound_name: { clock_alarm: 0 }
 
@@ -26,7 +26,12 @@ class Goal < ActiveRecord::Base
   }
 
   validates :category_id, presence: true
+  validates :start_at, presence: true
+  validates :sound_name, presence: true
+  validates :duration, :numericality => { :greater_than => 0 }
+  
   validate :validate_repeat_every #validate repeat_every in ["monday", "tuesday", ...]
+  validate :validate_goal_settings, on: [ :create ]
 
   delegate :selected_color, to: :category, prefix: true, allow_nil: true
 
@@ -180,6 +185,12 @@ class Goal < ActiveRecord::Base
   before_create do
     generate_goal_name
     set_default_start_time
+  end
+
+  def validate_goal_settings
+    if Goal.exists?(category_id: category_id, start_at: start_at, creator_id: creator_id)
+      errors.add(" ", "You already setted goal: #{detail_name}")
+    end
   end
 
   def validate_repeat_every

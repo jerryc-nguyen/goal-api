@@ -48,7 +48,7 @@ class GoalSession < ActiveRecord::Base
   }
 
   scope :same_goal_for, -> (goal_session) {
-    where(creator: goal_session.creator_id, goal: goal_session.goal_id)
+    where(creator: goal_session.creator_id, goal: goal_session.goal_id, participant_id: goal_session.participant_id)
   }
 
   scope :sessions_history_of, -> (goal, viewing_user) {
@@ -85,6 +85,8 @@ class GoalSession < ActiveRecord::Base
   scope :sessions_to_complete_or_completed_created_today_for, ->(goal, participant) {
     sessions_created_today_for(goal, participant).where(status: [DOING, COMPLETED])
   }
+
+  scope :accepted, -> { where(is_accepted: true) }
 
   def invite_participant_for(user)
     goal.add_participant_for(user, false)
