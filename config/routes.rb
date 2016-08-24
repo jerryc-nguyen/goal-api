@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     resources :friends, only: [:index] do
       collection do
         get :buddies
+        get :suggested
       end
     end
 
