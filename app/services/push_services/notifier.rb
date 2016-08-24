@@ -16,16 +16,20 @@ class PushServices::Notifier
     airship_push_instance.audience = audience
     airship_push_instance.notification = Urbanairship.notification(
       alert: message, 
-      ios: Urbanairship.ios(
-        sound: "default",
-        alert: message,
-        extra: { event_type: event_type }
-      )
+      ios: ios_params_for(message, event_type)
     )
     airship_push_instance.send_push
   end
 
   private
+
+  def ios_params_for(message, event_type)
+    Urbanairship.ios(
+      sound: "default",
+      alert: message,
+      extra: { event_type: event_type }
+    )
+  end
 
   def airship_client
     @airship_client ||= Urbanairship::Client.new(key: Settings.push_notification.app_id, secret: Settings.push_notification.app_master_secret)

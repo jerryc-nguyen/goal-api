@@ -62,7 +62,7 @@ class Api::GoalSessionsController < ApiController
 
   def pending_accept
     goal_sessions = GoalSession.pending_accept_to_join_goal_for(current_user)
-    success(data: goal_sessions)
+    success(data: goal_sessions, serializer: Api::GoalSessionInvitationSerializer)
   end
 
   def accept
