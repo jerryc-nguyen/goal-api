@@ -8,7 +8,7 @@ class Api::GoalsController < ApiController
   end
 
   def show
-    success(data: @goal)
+    success(data: @goal, serializer: Api::GoalDetailSerializer)
   end
 
   def create
