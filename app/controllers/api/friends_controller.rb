@@ -7,7 +7,7 @@ class Api::FriendsController < ApiController
 
   def suggested
     except_user_ids = current_user.friends.ids + [current_user.id]
-    users = User.where.not(id: except_user_ids)
+    users = User.where.not(id: except_user_ids).limit(3)
     success(data: users)
   end
 
