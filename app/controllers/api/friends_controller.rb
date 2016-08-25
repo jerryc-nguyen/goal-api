@@ -7,7 +7,7 @@ class Api::FriendsController < ApiController
 
   def suggested
     except_user_ids = current_user.friends.ids + [current_user.id]
-    users = User.where.not(id: except_user_ids).limit(3)
+    users = User.where.not(id: except_user_ids).order(id: :desc)
     success(data: users)
   end
 
