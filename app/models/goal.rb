@@ -1,6 +1,8 @@
 class Goal < ActiveRecord::Base
   include Serializeable
-  
+  include Likeable
+  include Commentable
+
   DEFAULT_SERIALIZER = Api::GoalSerializer
   
   DAYS_PREVIOUS  = 7

@@ -97,5 +97,5 @@ class Api::GoalSessionsController < ApiController
   def goal_session_params
     @goal_session_params ||= params.require(:goal_session).permit(*Settings.params_permitted.goal_session)
   end
-
+  
 end

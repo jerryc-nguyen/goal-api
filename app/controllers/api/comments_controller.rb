@@ -1,0 +1,47 @@
+class Api::CommentsController < ApiController
+  before_action :authenticate!
+  before_action :find_comment, only: [ :update, :destroy, :like_toggle ]
+
+  def update
+    if @comment.update(comments_params)
+      success(data: @comment)
+    else
+      error(message: @comment.errors.full_messages.to_sentence)
+    end
+  end
+
+  def destroy
+    if @comment.destroy
+      success(data: { message: "Deleted successfuly!" })
+    else
+      error(message: @comment.errors.full_messages.to_sentence)
+    end
+  end
+
+  def like_toggle
+    like = @comment.likes.with_deleted.find_by(creator_id: current_user.id)
+    if like.present?
+      if like.deleted?
+        like.restore
+        success(data: @comment)
+      else
+        like.destroy
+        success(data: @comment)
+      end
+    else
+      @comment.likes.create(creator_id: current_user.id)
+      success(data: @comment)
+    end
+  end
+
+  private
+
+  def find_comment
+    @comment ||= current_user.comments.find(params[:id])
+  end
+
+  def comments_params
+    @comments_params ||= params.require(:category).permit(*Settings.params_permitted.comment)
+  end
+
+end

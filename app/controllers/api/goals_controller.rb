@@ -1,6 +1,6 @@
 class Api::GoalsController < ApiController
   before_action :authenticate!
-  before_action :find_goal, only: [ :show, :update, :destroy]
+  before_action :find_goal, only: [ :show, :update, :destroy, :like_toggle, :comments, :comment]
   before_action :validate_goal_owner, only: [ :update, :destroy ]
 
   def index
@@ -43,7 +43,42 @@ class Api::GoalsController < ApiController
     end
   end
   
+  def like_toggle
+    like = @goal.likes.with_deleted.find_by(creator_id: current_user.id)
+    if like.present?
+      if like.deleted?
+        like.restore
+        success(data: @goal)
+      else
+        like.destroy
+        success(data: @goal)
+      end
+    else
+      @goal.likes.create(creator_id: current_user.id)
+      success(data: @goal)
+    end
+  end
+
+  def comments
+    success(data: @goal.comments.order(id: :desc).page(params[:page] || 1))
+  end
+
+  def comment
+    comment = @goal.comments.new(comment_params)
+    if comment.save
+      success(data: comment)
+    else
+      error(message: comment.errors.full_messages.to_sentence)
+    end
+  end
+
   private
+
+  def comment_params
+    @comment_params ||= params.require(:comment)
+      .permit(*Settings.params_permitted.comment)
+      .merge(creator_id: current_user.id)
+  end
 
   def validate_goal_owner
     error(message: "Only goal creator can do this.") if current_user.id != @goal.creator_id

@@ -181,7 +181,7 @@ DEPENDENCIES
   kaminari
   koala
   paperclip (~> 4.2)
-  paranoia (~> 2.1.4)
+  paranoia
   pg (~> 0.18.4)
   public_activity
   rails (= 4.2.6)

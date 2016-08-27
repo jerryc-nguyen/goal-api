@@ -8,11 +8,10 @@ module Commentable
   def commentor_ids
     @commentor_ids ||= comments.pluck(:creator_id).map(&:to_s)
   end
-
   
   #################### SEED FUNCS
 
-  def comment_by creator, content = nil
+  def comment_by(creator, content = nil)
     count = Comment.count
     content = content || "#{creator.display_name} - Comment - #{count}"
     comment = comments.create(content: content, creator_id: creator.id)

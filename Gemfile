@@ -15,7 +15,7 @@ gem 'paperclip', '~> 4.2'
 
 gem 'amistad',    '~> 0.10.2'
 
-gem 'paranoia', "~> 2.1.4"
+gem 'paranoia'
 
 gem 'config'
 

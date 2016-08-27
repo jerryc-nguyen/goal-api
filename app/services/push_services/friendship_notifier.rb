@@ -27,11 +27,11 @@ class PushServices::FriendshipNotifier
   end
 
   def request_message
-    [ @current_user.display_name, "want to be your friend.", rand(1-1000) ].join(" ")
+    [ @current_user.display_name, "want to be your friend." ].join(" ")
   end
 
   def accept_message
-    [ @current_user.display_name, "accepted your friend request.", rand(1-1000) ].join(" ")
+    [ @current_user.display_name, "accepted your friend request." ].join(" ")
   end
 
 end

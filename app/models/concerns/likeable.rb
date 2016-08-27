@@ -2,14 +2,15 @@ module Likeable
   extend ActiveSupport::Concern
 
   included do
-    has_many  :likes, as: :likeable,  dependent: :destroy
+    has_many  :likes, as: :likeable, counter_cache: true,  dependent: :destroy
   end
 
   def liker_ids
     likes.pluck(:creator_id)
   end
 
-  def like_by creator
+  #################### SEED FUNCS
+  def like_by(creator)
     like = likes.create(creator_id: creator.id)
     if like
       p "Like created by #{creator.display_name}"

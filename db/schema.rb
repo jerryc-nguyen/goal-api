@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160821052958) do
+ActiveRecord::Schema.define(version: 20160827173200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160821052958) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.datetime "deleted_at"
+    t.integer  "likes_count",      default: 0
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
@@ -102,19 +103,21 @@ ActiveRecord::Schema.define(version: 20160821052958) do
   add_index "goal_sessions", ["participant_id"], name: "index_goal_sessions_on_participant_id", using: :btree
 
   create_table "goals", force: :cascade do |t|
-    t.string   "name",         default: ""
+    t.string   "name",           default: ""
     t.time     "start_at"
-    t.integer  "duration",     default: 0
-    t.boolean  "is_challenge", default: false
-    t.boolean  "is_default",   default: false
-    t.integer  "status",       default: 0
+    t.integer  "duration",       default: 0
+    t.boolean  "is_challenge",   default: false
+    t.boolean  "is_default",     default: false
+    t.integer  "status",         default: 0
     t.integer  "creator_id"
     t.integer  "category_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.datetime "deleted_at"
-    t.integer  "sound_name",   default: 0
-    t.text     "repeat_every", default: [],                 array: true
+    t.integer  "sound_name",     default: 0
+    t.text     "repeat_every",   default: [],                 array: true
+    t.integer  "likes_count",    default: 0
+    t.integer  "comments_count", default: 0
   end
 
   add_index "goals", ["category_id"], name: "index_goals_on_category_id", using: :btree

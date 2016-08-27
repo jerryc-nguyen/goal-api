@@ -16,7 +16,13 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :goals, except: [:new, :edit]
+    resources :goals, except: [:new, :edit] do
+      member do
+        post :like_toggle
+        post :comment
+        get :comments
+      end
+    end
 
     resources :goal_sessions, except: [ :new, :edit ] do
       member do
@@ -50,6 +56,12 @@ Rails.application.routes.draw do
     end
 
     resources :categories, except: [:new, :edit]
+      
+    resources :comments, only: [:update, :destroy] do
+      member do
+        post :like_toggle
+      end
+    end
     
   end
 

@@ -3,8 +3,11 @@ class PushServices::Notifier
   EVENT_TYPES = {
     friend_requested: "friend_requested",
     friend_accepted: "friend_accepted",
-    goal_invited: "goal_invited",
-    goal_accepted: "goal_accepted"
+    challenge_sent: "challenge_sent",
+    challenge_accepted: "challenge_accepted",
+    like_goal: "like_goal",
+    comment_on_goal: "comment_on_goal",
+    like_comment: "like_comment"
   }
 
   def initialize(push_client = nil)
