@@ -54,6 +54,7 @@ class Api::GoalSessionsController < ApiController
   def invite
     goal_session = @goal_session.invite_participant_for(@friend)
     if goal_session.valid?
+      PushServices::GoalNotifier.new(current_user, goal_session.goal).notify_challenge_to(@friend)
       success(data: { message: "Invitation sent to #{@friend.display_name}" })
     else
       error(message: goal_session.errors.full_messages.to_sentence)
@@ -72,6 +73,7 @@ class Api::GoalSessionsController < ApiController
 
     goal_session.is_accepted = true
     if goal_session.save
+      PushServices::GoalNotifier.new(current_user, goal_session.goal).notify_challenge_accepted_to(goal_session.creator)
       success(data: "Accepted to join goal: #{goal_session.goal_detail_name}")
     else
       error(message: "Fail to join goal: #{goal_session.goal_detail_name}")

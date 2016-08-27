@@ -55,6 +55,7 @@ class Api::GoalsController < ApiController
       end
     else
       @goal.likes.create(creator_id: current_user.id)
+      notifier_service.notify_like
       success(data: @goal)
     end
   end
@@ -66,6 +67,7 @@ class Api::GoalsController < ApiController
   def comment
     comment = @goal.comments.new(comment_params)
     if comment.save
+      notifier_service.notify_comment
       success(data: comment)
     else
       error(message: comment.errors.full_messages.to_sentence)
@@ -73,6 +75,10 @@ class Api::GoalsController < ApiController
   end
 
   private
+
+  def notifier_service
+    @notifier_service ||= PushServices::GoalNotifier.new(current_user, @goal)
+  end
 
   def comment_params
     @comment_params ||= params.require(:comment)

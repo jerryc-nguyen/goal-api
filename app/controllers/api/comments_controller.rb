@@ -30,18 +30,23 @@ class Api::CommentsController < ApiController
       end
     else
       @comment.likes.create(creator_id: current_user.id)
+      notifier_service.notify_like_comment_for(@comment)
       success(data: @comment)
     end
   end
 
   private
+  
+  def notifier_service
+    @notifier_service ||= PushServices::GoalNotifier.new(current_user, @goal)
+  end
 
   def find_comment
     @comment ||= current_user.comments.find(params[:id])
   end
 
   def comments_params
-    @comments_params ||= params.require(:category).permit(*Settings.params_permitted.comment)
+    @comments_params ||= params.require(:comment).permit(*Settings.params_permitted.comment)
   end
 
 end

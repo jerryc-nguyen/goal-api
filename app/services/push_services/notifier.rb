@@ -14,23 +14,23 @@ class PushServices::Notifier
     @push_client = push_client || airship_client
   end
 
-  def push(message: "Hello from Goal API Backend", tag: nil, event_type: nil)
+  def push(message: "Hello from Goal API Backend", tag: nil, extra_data: {})
     audience = tag.present? ? Urbanairship.tag(tag) : Urbanairship.all
     airship_push_instance.audience = audience
     airship_push_instance.notification = Urbanairship.notification(
       alert: message, 
-      ios: ios_params_for(message, event_type)
+      ios: ios_params_for(message, extra_data)
     )
     airship_push_instance.send_push
   end
 
   private
 
-  def ios_params_for(message, event_type)
+  def ios_params_for(message, extra_data)
     Urbanairship.ios(
       sound: "default",
       alert: message,
-      extra: { event_type: event_type }
+      extra: extra_data
     )
   end
 
