@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       end
     end
     
+    resources :chats, only: [ :index, :create, :update, :destroy ]
   end
 
   root to: "api#index", via: :all

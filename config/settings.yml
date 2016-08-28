@@ -1,13 +1,17 @@
 params_permitted:
   user: [ "display_name", "email", "avatar_url", "token", "first_name", "last_name", "birthday", "phone_number", "latitude", "longitude" ]
-  goal: [ "name", "start_at", "repeat_every", "duration", "is_challenge", "is_default", "category_id"]
-  comment: [ "content" ]
   
+  goal: [ "name", "start_at", "repeat_every", "duration", "is_challenge", "is_default", "category_id"]
+  
+  comment: [ "content" ]
+
   friendship: [ "friend_id", "blocker_id" ]
   
   category: [ "name" ]
   
   goal_session: [ "score", "status", "remind_user_at"]
+    
+  chat: [ "message", "sender_id", "receiver_id", "is_read", "goal_id" ]
 
 default_avatar: "https://s9.postimg.org/ub0hzcfdr/default_avatar.jpg"
 
@@ -31,3 +35,8 @@ goals:
 push_notification:
   app_id: <%= ENV['AIR_SHIPS_APP_KEY'] %>
   app_master_secret: <%= ENV['AIR_SHIPS_APP_MASTER_SECRET'] %>
+
+pubnub:
+  pub_key: <%= ENV['PUBNUB_PUB_KEY'] %>
+  sub_key: <%= ENV['PUBNUB_SUB_KEY'] %>
+

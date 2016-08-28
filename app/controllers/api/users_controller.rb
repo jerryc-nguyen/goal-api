@@ -60,7 +60,7 @@ class Api::UsersController < ApiController
     if current_user.update(latitude: params[:latitude], longitude: params[:longitude]) 
       success(data: { message: "Update current location successfully." })
     else
-      success(data: { message: "Update current location fail." })
+      error(message: "Update current location fail.")
     end
   end
 

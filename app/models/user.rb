@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
   has_many :likes, foreign_key: :creator_id
   has_many :notifications
   has_many :categories
-  
+  has_many :sent_chats, class_name: "Chat", foreign_key: :sender_id
+
   scope :goal_buddies_of, -> (user) {
     goal_ids_sql = user.goal_sessions
       .select("goal_sessions.goal_id as selected_goal_ids").to_sql
@@ -71,6 +72,19 @@ class User < ActiveRecord::Base
     "user-#{self.id}"
   end
 
+  # SEEDS FUNCS
+  def send_to_user(user, message = nil)
+    count = Chat.last.id + 1
+    message ||= "Test message from #{self.display_name} - #{count}"
+    sent_chats.create({receiver_id: user.id, message: message})
+  end
+
+  def send_to_goal(goal, message = nil)
+    count = Chat.last.id + 1
+    message ||= "Test message from #{self.display_name} - #{count}"
+    sent_chats.create({goal_id: goal.id, message: message})
+  end
+
   private
 
   before_create do 
@@ -102,5 +116,4 @@ class User < ActiveRecord::Base
       end
     end
   end
-
 end
