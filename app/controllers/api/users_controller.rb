@@ -28,7 +28,7 @@ class Api::UsersController < ApiController
 
   def destroy
     if @user.destroy
-      success(data: { message: "Deleted successfuly!" })
+      success(data: { message: "Deleted successfully." })
     else
       error(message: @user.errors.full_messages.to_sentence)
     end
@@ -53,6 +53,19 @@ class Api::UsersController < ApiController
     }
 
     success(data: response_data)
+  end
+
+  def update_current_location
+    if current_user.update(latitude: params[:latitude], longitude: params[:longitude]) 
+      success(data: { message: "Update current location successfully." })
+    else
+      success(data: { message: "Update current location fail." })
+    end
+  end
+
+  def nearby
+    data = User.near_by(current_user)
+    success(data: data, serializer: Api::NearbyUserSerializer)
   end
 
   private

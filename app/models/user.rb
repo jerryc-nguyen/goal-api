@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
     User.where("users.id IN (#{participant_ids_same_goal_sql}) AND users.id != #{user.id}")
   }
 
+  scope :near_by, -> (user) {
+    User.where("users.latitude != '' AND users.longitude != ''")
+  }
+
   def pending_friend_with?(user)
     Friendship.exists?(friendable_id: self.id, friend_id: user.id, pending: true)
   end

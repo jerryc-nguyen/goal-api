@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :users, except: [:new, :edit]  do
       collection do
         get :home_timeline
+        get :nearby
+        post :update_current_location
       end
 
       member do
