@@ -1,4 +1,5 @@
 class Api::UsersController < ApiController
+  before_action :authenticate!, only: [:home_timeline, :timeline, :update_current_location, :nearby]
   before_action :find_user, only: [ :show, :update, :destroy ]
 
   def index
