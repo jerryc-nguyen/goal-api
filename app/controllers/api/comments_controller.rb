@@ -23,16 +23,14 @@ class Api::CommentsController < ApiController
     if like.present?
       if like.deleted?
         like.restore
-        success(data: @comment)
       else
         like.destroy
-        success(data: @comment)
       end
     else
       @comment.likes.create(creator_id: current_user.id)
       notifier_service.notify_like_comment_for(@comment)
-      success(data: @comment)
     end
+    success(data: @comment.reload)
   end
 
   private

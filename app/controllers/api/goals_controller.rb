@@ -48,16 +48,14 @@ class Api::GoalsController < ApiController
     if like.present?
       if like.deleted?
         like.restore
-        success(data: @goal)
       else
         like.destroy
-        success(data: @goal)
       end
     else
       @goal.likes.create(creator_id: current_user.id)
       notifier_service.notify_like
-      success(data: @goal)
     end
+    success(data: @goal.reload)
   end
 
   def comments
