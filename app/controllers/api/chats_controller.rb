@@ -7,6 +7,15 @@ class Api::ChatsController < ApiController
     success(data: chats)
   end
 
+  def chatting
+    chats = if params[:goal_id].to_i > 0
+      Chat.buddies_chat_for(params[:goal_id]).page(params[:page] || 1)
+    else
+      Chat.friend_chat_for(current_user.id, params[:receiver_id]).page(params[:page] || 1)
+    end
+    success(data: chats)
+  end
+
   def create
     chat = current_user.sent_chats.create(chat_params)
     if chat.valid?

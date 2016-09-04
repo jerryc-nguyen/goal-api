@@ -65,7 +65,11 @@ Rails.application.routes.draw do
       end
     end
     
-    resources :chats, only: [ :index, :create, :update, :destroy ]
+    resources :chats, only: [ :index, :create, :update, :destroy ] do
+      collection do
+        get :chatting
+      end
+    end
   end
 
   root to: "api#index", via: :all
