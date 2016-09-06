@@ -30,6 +30,11 @@ class User < ActiveRecord::Base
     User.where("users.latitude != '' AND users.longitude != ''")
   }
 
+  scope :participants_of, -> (goal) {
+    user_ids = goal.goal_sessions.accepted.pluck(:participant_id)
+    User.where(id: user_ids)
+  }
+
   def pending_friend_with?(user)
     Friendship.exists?(friendable_id: self.id, friend_id: user.id, pending: true)
   end
@@ -69,6 +74,10 @@ class User < ActiveRecord::Base
   end
 
   def airship_tag
+    "user-#{self.id}"
+  end
+
+  def realtime_channel
     "user-#{self.id}"
   end
 

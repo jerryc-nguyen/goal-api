@@ -19,6 +19,7 @@ class Api::ChatsController < ApiController
   def create
     chat = current_user.sent_chats.create(chat_params)
     if chat.valid?
+      ChatServices::Chatting.new(current_user, chat).process
       success(data: chat)
     else
       error(message: chat.errors.full_messages.to_sentence)

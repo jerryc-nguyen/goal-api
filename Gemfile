@@ -23,6 +23,7 @@ gem "koala"
 
 gem 'urbanairship', github: 'urbanairship/ruby-library'
 
+gem 'pubnub'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

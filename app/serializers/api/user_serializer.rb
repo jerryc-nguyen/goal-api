@@ -1,5 +1,5 @@
 class Api::UserSerializer < ActiveModel::Serializer
-  attributes  :id, :id_str, :display_name, :email, :avatar_url, :first_name, :last_name, :birthday, :phone_number, :latitude, :longitude, :created_at, :token, :goal_count, :is_friend, :is_pending_friend, :airship_tag
+  attributes  :id, :id_str, :display_name, :email, :avatar_url, :first_name, :last_name, :birthday, :phone_number, :latitude, :longitude, :created_at, :token, :goal_count, :is_friend, :is_pending_friend, :airship_tag, :realtime_channel
 
   def id_str
     object.id.to_s
