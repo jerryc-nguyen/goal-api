@@ -9,7 +9,7 @@ class Api::ChatsController < ApiController
 
   def chatting
     chats = if params[:goal_id].to_i > 0
-      Chat.buddies_chat_for(params[:goal_id], params[:last_item_id]).limit(5)
+      Chat.buddies_chat_for(params[:goal_id], params[:last_item_id]).limit(5).reverse
     else
       Chat.friend_chat_for(current_user.id, params[:receiver_id], params[:last_item_id]).limit(5).reverse
     end
