@@ -8,7 +8,9 @@ class PushServices::FriendshipNotifier
     notifier.push(
       message: request_message, 
       tag: user.airship_tag, 
-      event_type: PushServices::Notifier::EVENT_TYPES[:friend_requested]
+      extra_data: {
+        event_type: PushServices::Notifier::EVENT_TYPES[:friend_requested]
+      }
     )
   end
 
@@ -16,7 +18,9 @@ class PushServices::FriendshipNotifier
     notifier.push(
       message: accept_message, 
       tag: user.airship_tag, 
-      event_type: PushServices::Notifier::EVENT_TYPES[:friend_accepted]
+      extra_data: {
+        event_type: PushServices::Notifier::EVENT_TYPES[:friend_accepted]
+      }
     )
   end
 
