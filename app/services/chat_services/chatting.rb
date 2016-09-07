@@ -21,6 +21,7 @@ module ChatServices
     private 
 
     def direct_chat
+      return if @current_user.id == @chat.receiver.id
       p "Pushing direct message to: #{@chat.receiver.display_name}, #{ @chat.receiver.realtime_channel }"
       ChatServices::Chatting.send_message(
         to_channel: @chat.receiver.realtime_channel,
@@ -33,6 +34,8 @@ module ChatServices
 
     def group_chat
       User.participants_of(@chat.goal).each do |user|
+        next if user.id == @current_user.id
+
         p "Pushing group_chat to: #{user.display_name}, #{ user.realtime_channel }"
         ChatServices::Chatting.send_message(
           to_channel: user.realtime_channel,
