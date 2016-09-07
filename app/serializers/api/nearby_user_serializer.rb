@@ -1,5 +1,4 @@
-class Api::NearbyUserSerializer < ActiveModel::Serializer
-  attributes  :id, :display_name, :avatar_url, :latitude, :longitude, :goal_count, :is_friend, :is_pending_friend, :airship_tag, :active_goals
+class Api::NearbyUserSerializer < Api::UserSerializer
 
   def goal_count
     Goal.joined_by(object).size

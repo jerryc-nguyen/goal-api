@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   }
 
   scope :near_by, -> (user) {
-    User.where("users.latitude != '' AND users.longitude != ''")
+    User.where("users.latitude != '' AND users.longitude != '' AND users.id != ?", user.id)
   }
 
   scope :participants_of, -> (goal) {
