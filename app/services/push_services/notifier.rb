@@ -7,7 +7,9 @@ class PushServices::Notifier
     challenge_accepted: "challenge_accepted",
     like_goal: "like_goal",
     comment_on_goal: "comment_on_goal",
-    like_comment: "like_comment"
+    like_comment: "like_comment",
+    direct_message: "direct_message",
+    group_message: "group_message"
   }
 
   def initialize(push_client = nil)

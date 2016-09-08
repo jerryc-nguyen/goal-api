@@ -9,7 +9,7 @@ module ChatServices
     def process
       if @chat.receiver.present?
         direct_chat
-      else @chat.goal.present?
+      else 
         group_chat
       end
     end
@@ -30,9 +30,13 @@ module ChatServices
           data: @chat.serialize
         }
       )
+
+      PushServices::ChatNotifier.new(@current_user, @chat, @chat.receiver).process
     end
 
     def group_chat
+      return unless @chat.goal.present?
+
       User.participants_of(@chat.goal).each do |user|
         next if user.id == @current_user.id
 
@@ -44,6 +48,8 @@ module ChatServices
             data: @chat.serialize
           }
         )
+        
+        PushServices::ChatNotifier.new(@current_user, @chat, user).process
       end
     end
 
