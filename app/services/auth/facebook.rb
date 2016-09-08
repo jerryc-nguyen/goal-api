@@ -17,7 +17,7 @@ class Auth::Facebook
       return false
     end
 
-    @logged_user = User.facebook.find_by(auth_system_id: fb_user[:id]) || create_user_for(fb_user) 
+    @logged_user = User.facebook.find_by(email: fb_user[:email]) || create_user_for(fb_user) 
     @logged_user.auth_token = @access_token
     @logged_user.save
     true
