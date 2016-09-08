@@ -164,12 +164,12 @@ class Goal < ActiveRecord::Base
     end
   end
 
-  #swim: 23: [0, 2, 4, 6]
+  #swim: 23: [0, 2, 4, 6, 8, 10, 12]
   #run: 24 : [0, 1, 3, 5]
   #mediate: 25 [1, 3, 4, 7]
   def add_fake_sessions_for(user, date_minus_arr = [])
     raise "#{user.display_name} does not participate to this goal!" unless user.participate_to?(self)
-    scores = [0, 25, 50, 75, 100]
+    scores = [25, 50, 75]
     
     date_minus_arr.each do |day_ago|
       date = Time.current - day_ago.day
